@@ -1,0 +1,13 @@
+<h1>CarCare</h1>
+<p>Upravljanje vozilima, historijom održavanja i troškovima.</p>
+
+<p class="status">
+  API:
+  @if (apiAvailable() === undefined) {
+    <span>provjera...</span>
+  } @else if (apiAvailable()) {
+    <span class="ok">dostupan</span>
+  } @else {
+    <span class="error">nedostupan</span>
+  }
+</p>

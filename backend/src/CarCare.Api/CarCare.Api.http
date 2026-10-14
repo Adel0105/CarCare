@@ -1,0 +1,5 @@
+@CarCare.Api_HostAddress = https://localhost:7180
+
+GET {{CarCare.Api_HostAddress}}/api/health
+
+###

@@ -1,0 +1,13 @@
+.status {
+  color: var(--color-muted);
+}
+
+.ok {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.error {
+  color: var(--color-danger);
+  font-weight: 600;
+}
