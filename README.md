@@ -1,77 +1,84 @@
 # CarCare
 
-CarCare je web aplikacija za upravljanje vozilima, praćenje historije održavanja i evidenciju troškova
-povezanih s automobilima. Korisnik evidentira svoja vozila, prati servise i popravke, bilježi troškove
-i ima pregled nad budućim obavezama održavanja.
+![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?logo=dotnet&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-LocalDB-CC2927?logo=microsoftsqlserver&logoColor=white)
+![Status](https://img.shields.io/badge/status-in%20development-yellow)
 
-Projekat je samostalni portfolio projekat s fokusom na kvalitetnu arhitekturu, održiv kod i realnu
-poslovnu logiku.
+**CarCare** is a full-stack web application for managing personal vehicles, tracking their maintenance
+history and keeping an eye on car-related expenses and upcoming service work.
 
-> **Status:** postavljena je početna arhitektura. Poslovne funkcionalnosti još nisu implementirane.
+It is a portfolio project built with **ASP.NET Core Web API**, **Angular** and **Microsoft SQL Server**.
+The focus is on clean architecture, maintainable code and realistic business logic rather than on
+building a large platform.
 
-## Planirani moduli
+## Table of contents
 
-1. Upravljanje vozilima
-2. Historija održavanja
-3. Podsjetnici za održavanje (po datumu i kilometraži)
-4. Evidencija troškova
-5. Dashboard
+- [Features](#features)
+- [Tech stack](#tech-stack)
+- [Architecture](#architecture)
+- [Project structure](#project-structure)
+- [Getting started](#getting-started)
+- [Configuration](#configuration)
+- [Database migrations](#database-migrations)
+- [Design decisions](#design-decisions)
 
-## Tehnologije
+## Features
 
-| Sloj      | Tehnologije                                                        |
-| --------- | ------------------------------------------------------------------ |
-| Backend   | C#, ASP.NET Core Web API (.NET 9), Entity Framework Core 9         |
-| Baza      | Microsoft SQL Server (lokalno: SQL Server LocalDB)                 |
-| API docs  | OpenAPI (`Microsoft.AspNetCore.OpenApi`) + Swagger UI              |
-| Frontend  | Angular 21, TypeScript, Angular Router, HttpClient, SCSS, Vitest   |
-| Alati     | Git, npm, `dotnet-ef` (lokalni alat)                               |
+The project is developed incrementally, one module at a time.
 
-## Struktura repozitorija
+- [x] Project architecture, local development setup and API documentation
+- [ ] **Vehicles** – add, view, edit and delete vehicles (make, model, year, license plate, mileage)
+- [ ] **Maintenance history** – services, repairs and other work with date, mileage, description and cost
+- [ ] **Maintenance reminders** – upcoming work based on date and, where it makes sense, mileage
+- [ ] **Expenses** – categorized vehicle expenses and spending totals
+- [ ] **Dashboard** – overview of vehicles, recent services, upcoming reminders and costs
+- [ ] Authentication and per-user data *(planned for a later phase)*
 
-```
-CarCare/
-├── CarCare.sln                     # root solution
-├── global.json                     # fiksira .NET SDK 9.0.x
-├── Directory.Build.props           # zajedničke MSBuild postavke (net9.0, nullable, implicit usings)
-├── .config/dotnet-tools.json       # lokalni .NET alati (dotnet-ef)
-├── backend/
-│   └── src/
-│       ├── CarCare.Domain/         # domenski modeli i poslovna pravila
-│       ├── CarCare.Application/    # slučajevi upotrebe, servisi, DTO-i, apstrakcije
-│       ├── CarCare.Infrastructure/ # EF Core, SQL Server, implementacije apstrakcija
-│       │   └── Persistence/        # CarCareDbContext (i kasnije konfiguracije entiteta, migracije)
-│       └── CarCare.Api/            # HTTP endpointi, konfiguracija, composition root
-└── frontend/                       # Angular aplikacija
-    ├── proxy.conf.json             # dev proxy: /api -> backend
-    └── src/
-        ├── environments/           # konfiguracija po okruženju (apiBaseUrl)
-        └── app/
-            ├── app.config.ts       # globalni provideri (router, HttpClient)
-            ├── app.routes.ts       # root rute; funkcionalnosti se učitavaju lazy
-            ├── core/               # singleton servisi i layout aplikacije
-            │   ├── layout/shell/   # zaglavlje, navigacija, <router-outlet>
-            │   └── services/
-            ├── shared/             # zajedničke, ponovo upotrebljive UI komponente, pipe-ovi
-            └── features/           # jedna mapa po funkcionalnosti (home, kasnije vehicles, ...)
-```
+## Tech stack
 
-## Arhitektura backenda
+| Area      | Technologies                                                          |
+| --------- | --------------------------------------------------------------------- |
+| Backend   | C#, ASP.NET Core Web API (.NET 9), Entity Framework Core 9            |
+| Database  | Microsoft SQL Server (SQL Server LocalDB for local development)       |
+| API docs  | OpenAPI (`Microsoft.AspNetCore.OpenApi`) with Swagger UI              |
+| Frontend  | Angular 21, TypeScript, Angular Router, HttpClient, Signals, SCSS     |
+| Testing   | Vitest (frontend)                                                     |
+| Tooling   | Git, npm, `dotnet-ef` (pinned as a local .NET tool)                   |
 
-Backend koristi slojevitu arhitekturu. Zavisnosti su usmjerene prema unutrašnjim slojevima:
+## Architecture
 
-```
-CarCare.Api ──► CarCare.Infrastructure ──► CarCare.Application ──► CarCare.Domain
-     └──────────────────────────────────────────►┘
+### Overview
+
+The Angular app talks to the backend over a REST API. In development, the Angular dev server proxies
+every `/api` request to the backend, so no CORS configuration is needed.
+
+```mermaid
+flowchart LR
+    Browser["Angular app<br/>localhost:4200"] -- "/api/*" --> Api["ASP.NET Core API<br/>localhost:7180"]
+    Api --> Db[("SQL Server")]
 ```
 
-- **Domain** nema zavisnosti ni prema jednom drugom projektu niti prema NuGet paketima.
-- **Application** zavisi samo od Domaina. Ovdje se definišu apstrakcije (npr. interfejsi za pristup
-  podacima) koje Infrastructure implementira.
-- **Infrastructure** zavisi od Applicationa i sadrži EF Core / SQL Server implementacije.
-- **Api** je *composition root*: jedino mjesto koje poznaje sve slojeve i povezuje ih kroz DI.
+### Backend – layered architecture
 
-Svaki sloj registruje svoje servise kroz vlastitu extension metodu, a `Program.cs` ih samo poziva:
+The backend is split into four projects. Dependencies always point inward, toward the domain.
+
+```mermaid
+flowchart LR
+    Api[CarCare.Api] --> Infrastructure[CarCare.Infrastructure]
+    Api --> Application[CarCare.Application]
+    Infrastructure --> Application
+    Application --> Domain[CarCare.Domain]
+```
+
+| Project                  | Responsibility                                                                  |
+| ------------------------ | ------------------------------------------------------------------------------- |
+| `CarCare.Domain`         | Entities and business rules. No dependencies on other projects or frameworks.   |
+| `CarCare.Application`    | Use cases, application services, DTOs and abstractions (e.g. data access interfaces). |
+| `CarCare.Infrastructure` | EF Core `DbContext`, SQL Server setup and implementations of application abstractions. |
+| `CarCare.Api`            | HTTP endpoints, configuration and dependency injection (composition root).      |
+
+Each layer registers its own services through an extension method, so `Program.cs` stays small:
 
 ```csharp
 builder.Services
@@ -79,92 +86,149 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 ```
 
-Namjerno se **ne koriste** generički repozitoriji, CQRS, MediatR ni mikroservisi; uvode se samo ako se
-za njih pojavi konkretna potreba.
+### Frontend – feature-oriented structure
 
-## Arhitektura frontenda
+| Folder      | Purpose                                                                          |
+| ----------- | -------------------------------------------------------------------------------- |
+| `core/`     | App-wide singletons: layout (header, navigation), services, later interceptors and guards. |
+| `shared/`   | Reusable presentational components, directives and pipes.                         |
+| `features/` | One folder per feature (components, services, models, routes), lazy-loaded by the router. |
 
-- **core/** – stvari koje postoje jednom u aplikaciji: layout, servisi na nivou aplikacije,
-  kasnije interceptori i guardovi.
-- **shared/** – prezentacijske komponente, direktive i pipe-ovi koje koristi više funkcionalnosti.
-  Ne zavise od `features/`.
-- **features/** – svaka funkcionalnost ima svoju mapu (komponente, servisi, modeli, rute) i učitava se
-  lazy preko routera. Funkcionalnosti ne importuju jedna drugu direktno.
+The app uses standalone components, signals and `OnPush` change detection.
 
-Aplikacija koristi standalone komponente, signale i `OnPush` change detection.
+## Project structure
 
-## Preduslovi
+```
+CarCare/
+├── CarCare.sln
+├── global.json                     # pins the .NET SDK (9.0.x)
+├── Directory.Build.props           # shared build settings for all .NET projects
+├── .config/dotnet-tools.json       # local .NET tools (dotnet-ef)
+├── backend/
+│   └── src/
+│       ├── CarCare.Domain/
+│       ├── CarCare.Application/
+│       ├── CarCare.Infrastructure/
+│       │   └── Persistence/        # CarCareDbContext, entity configurations, migrations
+│       └── CarCare.Api/
+└── frontend/
+    ├── proxy.conf.json             # dev proxy: /api -> backend
+    └── src/
+        ├── environments/
+        └── app/
+            ├── core/
+            ├── shared/
+            └── features/
+```
 
-- [.NET SDK 9.0](https://dotnet.microsoft.com/download/dotnet/9.0) (≥ 9.0.100)
-- [Node.js](https://nodejs.org/) 20.19+ ili 22.12+ i npm
-- SQL Server LocalDB (dolazi uz Visual Studio ili SQL Server Express) ili druga SQL Server instanca
-- Pouzdan HTTPS razvojni certifikat: `dotnet dev-certs https --trust`
+## Getting started
 
-Angular CLI ne mora biti instaliran globalno; komande ispod koriste lokalnu verziju preko `npx`/npm skripti.
+### Prerequisites
 
-## Lokalno pokretanje
+- [.NET SDK 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [Node.js](https://nodejs.org/) 20.19+ or 22.12+ (with npm)
+- SQL Server LocalDB (included with Visual Studio or SQL Server Express) or any other SQL Server instance
+- A trusted HTTPS development certificate:
 
-### 1. Backend (API)
+  ```bash
+  dotnet dev-certs https --trust
+  ```
 
-```powershell
+A global Angular CLI installation is not required.
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd CarCare
+```
+
+### 2. Run the backend
+
+```bash
 dotnet tool restore
-dotnet build
 dotnet run --project backend/src/CarCare.Api --launch-profile https
 ```
 
-| Adresa                                   | Opis                    |
-| ---------------------------------------- | ----------------------- |
-| https://localhost:7180/swagger           | Swagger UI              |
-| https://localhost:7180/openapi/v1.json   | OpenAPI dokument        |
-| https://localhost:7180/api/health        | Health check            |
+| URL                                      | Description          |
+| ---------------------------------------- | -------------------- |
+| https://localhost:7180/swagger           | Swagger UI           |
+| https://localhost:7180/openapi/v1.json   | OpenAPI document     |
+| https://localhost:7180/api/health        | Health check         |
 
-Swagger UI i OpenAPI dokument su dostupni samo u `Development` okruženju.
+Swagger UI and the OpenAPI document are only available in the `Development` environment.
 
-### 2. Frontend (Angular)
+### 3. Run the frontend
 
-```powershell
+In a second terminal:
+
+```bash
 cd frontend
 npm install
 npm start
 ```
 
-Aplikacija je dostupna na http://localhost:4200. Dev server preusmjerava sve zahtjeve na `/api`
-prema `https://localhost:7180` (vidi `frontend/proxy.conf.json`), pa CORS u razvoju nije potreban.
-Početna stranica prikazuje da li je API dostupan.
+Open http://localhost:4200. The home page shows whether the API is reachable.
 
-### Build i testovi
+### Build and test
 
-```powershell
-dotnet build                 # iz root foldera
+```bash
+# backend (from the repository root)
+dotnet build
+
+# frontend
 cd frontend
-npm run build                # produkcijski build u frontend/dist/
-npm test -- --watch=false    # unit testovi (Vitest)
+npm run build
+npm test -- --watch=false
 ```
 
-## Konfiguracija i tajne
+## Configuration
 
-Connection string se čita iz `ConnectionStrings:CarCare`.
+The API reads its database connection string from `ConnectionStrings:CarCare`.
 
-- **Development:** `appsettings.Development.json` koristi LocalDB s Windows autentifikacijom
-  (`Server=(localdb)\MSSQLLocalDB;Database=CarCare;Trusted_Connection=True`). Ne sadrži lozinke.
-- **Druga SQL Server instanca / SQL autentifikacija:** koristi User Secrets i nikad ne upisuj lozinku
-  u `appsettings*.json`:
+| Environment            | Source                                                                                  |
+| ---------------------- | --------------------------------------------------------------------------------------- |
+| Development (default)  | `appsettings.Development.json` – LocalDB with Windows authentication, no credentials stored |
+| Custom local SQL Server | [User Secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets) (see below) |
+| Other environments     | Environment variable `ConnectionStrings__CarCare`                                        |
 
-  ```powershell
-  dotnet user-secrets set "ConnectionStrings:CarCare" "Server=...;Database=CarCare;User Id=...;Password=...;TrustServerCertificate=True" --project backend/src/CarCare.Api
-  ```
+To use a different SQL Server instance locally without committing credentials:
 
-- **Ostala okruženja:** environment varijabla `ConnectionStrings__CarCare`.
-
-Ako connection string nije postavljen, API odbija da se pokrene s jasnom porukom o grešci.
-
-## Entity Framework Core
-
-`CarCareDbContext` se nalazi u `CarCare.Infrastructure/Persistence` i automatski učitava sve
-`IEntityTypeConfiguration<T>` klase iz Infrastructure projekta. Entiteti i migracije još ne postoje.
-Kada budu dodani, migracije se kreiraju i primjenjuju ovako:
-
-```powershell
-dotnet ef migrations add <NazivMigracije> --project backend/src/CarCare.Infrastructure --startup-project backend/src/CarCare.Api --output-dir Persistence/Migrations
-dotnet ef database update --project backend/src/CarCare.Infrastructure --startup-project backend/src/CarCare.Api
+```bash
+dotnet user-secrets set "ConnectionStrings:CarCare" "Server=...;Database=CarCare;User Id=...;Password=...;TrustServerCertificate=True" --project backend/src/CarCare.Api
 ```
+
+If no connection string is configured, the API fails at startup with a clear error message.
+
+## Database migrations
+
+`CarCareDbContext` lives in `CarCare.Infrastructure/Persistence` and automatically applies every
+`IEntityTypeConfiguration<T>` from the Infrastructure assembly.
+
+```bash
+# create a migration
+dotnet ef migrations add <MigrationName> \
+  --project backend/src/CarCare.Infrastructure \
+  --startup-project backend/src/CarCare.Api \
+  --output-dir Persistence/Migrations
+
+# apply migrations to the database
+dotnet ef database update \
+  --project backend/src/CarCare.Infrastructure \
+  --startup-project backend/src/CarCare.Api
+```
+
+## Design decisions
+
+- **Layered architecture with inward dependencies.** The domain stays free of framework code, and the
+  application layer depends only on abstractions, which keeps business logic easy to test.
+- **The API project is the composition root.** It is the only project that knows about every layer and
+  wires them together through dependency injection.
+- **No unnecessary patterns.** Generic repositories, CQRS, MediatR and microservices are intentionally left
+  out. They will be introduced only if a concrete need appears.
+- **Feature-oriented frontend.** Each feature is self-contained and lazy-loaded, so the app can grow
+  without a single shared components folder.
+- **Dev proxy instead of CORS.** The frontend calls relative `/api` URLs, so the same code works locally and
+  behind a reverse proxy in production.
+- **No secrets in the repository.** Local development uses Windows authentication; any credentials go to
+  User Secrets or environment variables.
