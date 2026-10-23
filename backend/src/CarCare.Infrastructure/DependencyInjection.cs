@@ -1,4 +1,6 @@
+using CarCare.Application.Vehicles.Interfaces;
 using CarCare.Infrastructure.Persistence;
+using CarCare.Infrastructure.Vehicles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,8 @@ public static class DependencyInjection
                 $"Connection string '{ConnectionStringName}' is not configured.");
 
         services.AddDbContext<CarCareDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddScoped<IVehicleReadStore, VehicleReadStore>();
+        services.AddScoped<IVehicleWriteStore, VehicleWriteStore>();
 
         return services;
     }
