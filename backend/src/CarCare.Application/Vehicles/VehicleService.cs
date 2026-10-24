@@ -19,6 +19,11 @@ public class VehicleService : IVehicleService
         return _vehicleReadStore.GetAllAsync(cancellationToken);
     }
 
+    public Task<VehicleDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _vehicleReadStore.GetByIdAsync(id, cancellationToken);
+    }
+
     public async Task<VehicleDto> CreateAsync(CreateVehicleDto request, CancellationToken cancellationToken = default)
     {
         var vehicle = new Vehicle
@@ -44,5 +49,15 @@ public class VehicleService : IVehicleService
             CurrentMileage = vehicle.CurrentMileage,
             Notes = vehicle.Notes,
         };
+    }
+
+    public Task<bool> UpdateAsync(int id, UpdateVehicleDto request, CancellationToken cancellationToken = default)
+    {
+        return _vehicleWriteStore.UpdateAsync(id, request, cancellationToken);
+    }
+
+    public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _vehicleWriteStore.DeleteAsync(id, cancellationToken);
     }
 }
