@@ -22,6 +22,18 @@ public class VehiclesController : ControllerBase
         return Ok(vehicles);
     }
 
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        var vehicle = await _vehicleService.GetByIdAsync(id, cancellationToken);
+        if (vehicle is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(vehicle);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateAsync(
         [FromBody] CreateVehicleDto request,
@@ -29,5 +41,32 @@ public class VehiclesController : ControllerBase
     {
         var vehicle = await _vehicleService.CreateAsync(request, cancellationToken);
         return StatusCode(StatusCodes.Status201Created, vehicle);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateAsync(
+        int id,
+        [FromBody] UpdateVehicleDto request,
+        CancellationToken cancellationToken)
+    {
+        var updated = await _vehicleService.UpdateAsync(id, request, cancellationToken);
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
+    {
+        var deleted = await _vehicleService.DeleteAsync(id, cancellationToken);
+        if (!deleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }
