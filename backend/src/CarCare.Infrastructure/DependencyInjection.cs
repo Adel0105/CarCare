@@ -1,4 +1,6 @@
+using CarCare.Application.Expenses.Interfaces;
 using CarCare.Application.Vehicles.Interfaces;
+using CarCare.Infrastructure.Expenses;
 using CarCare.Infrastructure.Persistence;
 using CarCare.Infrastructure.Vehicles;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,8 @@ public static class DependencyInjection
         services.AddDbContext<CarCareDbContext>(options => options.UseSqlServer(connectionString));
         services.AddScoped<IVehicleReadStore, VehicleReadStore>();
         services.AddScoped<IVehicleWriteStore, VehicleWriteStore>();
+        services.AddScoped<IExpenseReadStore, ExpenseReadStore>();
+        services.AddScoped<IExpenseWriteStore, ExpenseWriteStore>();
 
         return services;
     }

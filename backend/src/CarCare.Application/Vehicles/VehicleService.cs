@@ -24,8 +24,13 @@ public class VehicleService : IVehicleService
         return _vehicleReadStore.GetByIdAsync(id, cancellationToken);
     }
 
-    public async Task<VehicleDto> CreateAsync(CreateVehicleDto request, CancellationToken cancellationToken = default)
+    public async Task<VehicleDto?> CreateAsync(CreateVehicleDto request, CancellationToken cancellationToken = default)
     {
+        if (await _vehicleReadStore.ExistsByLicensePlateAsync(request.LicensePlate, cancellationToken))
+        {
+            return null;
+        }
+
         var vehicle = new Vehicle
         {
             Make = request.Make,
@@ -51,9 +56,21 @@ public class VehicleService : IVehicleService
         };
     }
 
-    public Task<bool> UpdateAsync(int id, UpdateVehicleDto request, CancellationToken cancellationToken = default)
+    public async Task<bool?> UpdateAsync(int id, UpdateVehicleDto request, CancellationToken cancellationToken = default)
     {
-        return _vehicleWriteStore.UpdateAsync(id, request, cancellationToken);
+        var existing = await _vehicleReadStore.GetByIdAsync(id, cancellationToken);
+        if (existing is null)
+        {
+            return false;
+        }
+
+        if (await _vehicleReadStore.ExistsByLicensePlateAsync(request.LicensePlate, id, cancellationToken))
+        {
+            return null;
+        }
+
+        await _vehicleWriteStore.UpdateAsync(id, request, cancellationToken);
+        return true;
     }
 
     public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)

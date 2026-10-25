@@ -1,3 +1,5 @@
+using CarCare.Application.Expenses;
+using CarCare.Application.Expenses.Interfaces;
 using CarCare.Application.Vehicles;
 using CarCare.Application.Vehicles.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +11,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddScoped<IVehicleService, VehicleService>();
+        services.AddScoped<IExpenseService, ExpenseService>();
 
         return services;
     }
