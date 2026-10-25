@@ -41,4 +41,21 @@ public class VehicleReadStore(CarCareDbContext dbContext) : IVehicleReadStore
             })
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public Task<bool> ExistsByLicensePlateAsync(string licensePlate, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Vehicles.AnyAsync(
+            vehicle => vehicle.LicensePlate == licensePlate,
+            cancellationToken);
+    }
+
+    public Task<bool> ExistsByLicensePlateAsync(
+        string licensePlate,
+        int excludeVehicleId,
+        CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Vehicles.AnyAsync(
+            vehicle => vehicle.LicensePlate == licensePlate && vehicle.Id != excludeVehicleId,
+            cancellationToken);
+    }
 }

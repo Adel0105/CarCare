@@ -40,6 +40,11 @@ public class VehiclesController : ControllerBase
         CancellationToken cancellationToken)
     {
         var vehicle = await _vehicleService.CreateAsync(request, cancellationToken);
+        if (vehicle is null)
+        {
+            return Conflict();
+        }
+
         return StatusCode(StatusCodes.Status201Created, vehicle);
     }
 
@@ -50,7 +55,12 @@ public class VehiclesController : ControllerBase
         CancellationToken cancellationToken)
     {
         var updated = await _vehicleService.UpdateAsync(id, request, cancellationToken);
-        if (!updated)
+        if (updated is null)
+        {
+            return Conflict();
+        }
+
+        if (updated == false)
         {
             return NotFound();
         }
