@@ -1,5 +1,7 @@
 using CarCare.Application.Expenses;
 using CarCare.Application.Expenses.Interfaces;
+using CarCare.Application.MaintenanceRecords;
+using CarCare.Application.MaintenanceRecords.Interfaces;
 using CarCare.Application.Vehicles;
 using CarCare.Application.Vehicles.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +14,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IVehicleService, VehicleService>();
         services.AddScoped<IExpenseService, ExpenseService>();
+        services.AddScoped<IMaintenanceRecordService, MaintenanceRecordService>();
 
         return services;
     }
