@@ -1,0 +1,20 @@
+<section class="page-card">
+  <h1>Moja vozila</h1>
+
+  @if (vehicles$ | async; as vehicles) {
+    @if (vehicles.length === 0) {
+      <p>Nema dodanih vozila.</p>
+    } @else {
+      <ul class="vehicle-list">
+        @for (vehicle of vehicles; track vehicle.id) {
+          <li>
+            <strong>{{ vehicle.make }} {{ vehicle.model }}</strong>
+            ({{ vehicle.year }})
+            — {{ vehicle.licensePlate }},
+            {{ vehicle.currentMileage }} km
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

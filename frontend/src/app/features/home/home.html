@@ -1,13 +1,17 @@
-<h1>CarCare</h1>
-<p>Upravljanje vozilima, historijom održavanja i troškovima.</p>
+<section class="welcome-card">
+  <h1>Dobrodošao u CarCare</h1>
+  <p>
+    Aplikacija za praćenje vozila, troškova, održavanja i podsjetnika na jednom mjestu.
+  </p>
 
-<p class="status">
-  API:
-  @if (apiAvailable() === undefined) {
-    <span>provjera...</span>
-  } @else if (apiAvailable()) {
-    <span class="ok">dostupan</span>
-  } @else {
-    <span class="error">nedostupan</span>
-  }
-</p>
+  <p class="status">
+    API:
+    @if (apiAvailable() === undefined) {
+      <span>provjera...</span>
+    } @else if (apiAvailable()) {
+      <span class="ok">dostupan</span>
+    } @else {
+      <span class="error">nedostupan</span>
+    }
+  </p>
+</section>
