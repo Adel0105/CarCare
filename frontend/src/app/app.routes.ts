@@ -12,6 +12,11 @@ export const routes: Routes = [
         title: 'CarCare',
         loadComponent: () => import('./features/home/home').then((m) => m.Home),
       },
+      {
+        path: 'vehicles',
+        title: 'Moja vozila',
+        loadComponent: () => import('./features/vehicles/vehicles').then((m) => m.Vehicles),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

@@ -1,0 +1,19 @@
+.page-card {
+  max-width: 36rem;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.page-card h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.75rem;
+  color: var(--color-primary);
+}
+
+.page-card p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
