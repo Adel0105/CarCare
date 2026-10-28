@@ -1,20 +1,73 @@
-<section class="page-card">
+<section class="vehicles-page">
   <h1>Moja vozila</h1>
 
-  @if (vehicles$ | async; as vehicles) {
-    @if (vehicles.length === 0) {
-      <p>Nema dodanih vozila.</p>
+  <section class="add-vehicle">
+    <h2>Dodaj vozilo</h2>
+
+    <form class="vehicle-form">
+      <label>
+        Marka
+        <input type="text" name="make" required />
+      </label>
+
+      <label>
+        Model
+        <input type="text" name="model" required />
+      </label>
+
+      <label>
+        Godina
+        <input type="number" name="year" required min="1900" />
+      </label>
+
+      <label>
+        Registarska oznaka
+        <input type="text" name="licensePlate" required />
+      </label>
+
+      <label>
+        Trenutna kilometraža
+        <input type="number" name="currentMileage" required min="0" />
+      </label>
+
+      <label class="full-width">
+        Napomena
+        <textarea name="notes" rows="3"></textarea>
+      </label>
+
+      <button type="button" class="submit-button">Dodaj vozilo</button>
+    </form>
+  </section>
+
+  @if (vehicles$ | async; as state) {
+    @if (state.status === 'loading') {
+      <p class="empty-message">Učitavanje vozila...</p>
+    } @else if (state.status === 'error') {
+      <p class="empty-message">Greška pri učitavanju vozila. Pokušaj ponovo.</p>
+    } @else if (state.vehicles.length === 0) {
+      <p class="empty-message">Nema dodanih vozila.</p>
     } @else {
-      <ul class="vehicle-list">
-        @for (vehicle of vehicles; track vehicle.id) {
-          <li>
-            <strong>{{ vehicle.make }} {{ vehicle.model }}</strong>
-            ({{ vehicle.year }})
-            — {{ vehicle.licensePlate }},
-            {{ vehicle.currentMileage }} km
-          </li>
+      <div class="vehicle-grid">
+        @for (vehicle of state.vehicles; track vehicle.id) {
+          <article class="vehicle-card">
+            <h2 class="vehicle-title">{{ vehicle.make }} {{ vehicle.model }}</h2>
+            <dl class="vehicle-details">
+              <div>
+                <dt>Godina</dt>
+                <dd>{{ vehicle.year }}</dd>
+              </div>
+              <div>
+                <dt>Registarska oznaka</dt>
+                <dd>{{ vehicle.licensePlate }}</dd>
+              </div>
+              <div>
+                <dt>Kilometraža</dt>
+                <dd>{{ vehicle.currentMileage }} km</dd>
+              </div>
+            </dl>
+          </article>
         }
-      </ul>
+      </div>
     }
   }
 </section>

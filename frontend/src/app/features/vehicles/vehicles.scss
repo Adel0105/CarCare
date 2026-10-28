@@ -1,19 +1,123 @@
-.page-card {
-  max-width: 36rem;
-  padding: 1.75rem 1.5rem;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
-  border-radius: 0.75rem;
-  background: #ffffff;
-}
-
-.page-card h1 {
-  margin: 0 0 0.75rem;
+.vehicles-page h1 {
+  margin: 0 0 1.25rem;
   font-size: 1.75rem;
   color: var(--color-primary);
 }
 
-.page-card p {
+.add-vehicle {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.add-vehicle h2 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+}
+
+.vehicle-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+.vehicle-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.vehicle-form .full-width {
+  grid-column: 1 / -1;
+}
+
+.vehicle-form input,
+.vehicle-form textarea {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: #ffffff;
+}
+
+.vehicle-form input:focus,
+.vehicle-form textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  outline-offset: 1px;
+}
+
+.submit-button {
+  justify-self: start;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  filter: brightness(1.08);
+}
+
+.empty-message {
   margin: 0;
   color: var(--color-muted);
   line-height: 1.5;
+}
+
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+.vehicle-card {
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.vehicle-title {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.vehicle-details {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  dt {
+    margin: 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+    color: var(--color-text);
+  }
 }
