@@ -1,9 +1,14 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, of, startWith } from 'rxjs';
 
 import { Vehicle } from './vehicle';
 import { VehicleService } from './vehicle.service';
+
+type VehiclesViewState =
+  | { status: 'loading' }
+  | { status: 'error' }
+  | { status: 'success'; vehicles: Vehicle[] };
 
 @Component({
   selector: 'app-vehicles',
@@ -15,5 +20,9 @@ import { VehicleService } from './vehicle.service';
 export class Vehicles {
   private readonly vehicleService = inject(VehicleService);
 
-  protected readonly vehicles$: Observable<Vehicle[]> = this.vehicleService.getAll();
+  protected readonly vehicles$: Observable<VehiclesViewState> = this.vehicleService.getAll().pipe(
+    map((vehicles): VehiclesViewState => ({ status: 'success', vehicles })),
+    startWith({ status: 'loading' } as VehiclesViewState),
+    catchError((): Observable<VehiclesViewState> => of({ status: 'error' })),
+  );
 }
