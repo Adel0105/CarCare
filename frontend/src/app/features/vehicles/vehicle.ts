@@ -7,3 +7,12 @@ export interface Vehicle {
   currentMileage: number;
   notes: string | null;
 }
+
+export interface CreateVehicle {
+  make: string;
+  model: string;
+  year: number;
+  licensePlate: string;
+  currentMileage: number;
+  notes: string | null;
+}

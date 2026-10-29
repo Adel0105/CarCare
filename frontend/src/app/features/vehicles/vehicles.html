@@ -4,38 +4,56 @@
   <section class="add-vehicle">
     <h2>Dodaj vozilo</h2>
 
-    <form class="vehicle-form">
+    <form class="vehicle-form" (ngSubmit)="onSubmit()">
       <label>
         Marka
-        <input type="text" name="make" required />
+        <input type="text" name="make" [(ngModel)]="form.make" required />
       </label>
 
       <label>
         Model
-        <input type="text" name="model" required />
+        <input type="text" name="model" [(ngModel)]="form.model" required />
       </label>
 
       <label>
         Godina
-        <input type="number" name="year" required min="1900" />
+        <input type="number" name="year" [(ngModel)]="form.year" required min="1900" />
       </label>
 
       <label>
         Registarska oznaka
-        <input type="text" name="licensePlate" required />
+        <input type="text" name="licensePlate" [(ngModel)]="form.licensePlate" required />
       </label>
 
       <label>
         Trenutna kilometraža
-        <input type="number" name="currentMileage" required min="0" />
+        <input
+          type="number"
+          name="currentMileage"
+          [(ngModel)]="form.currentMileage"
+          required
+          min="0"
+        />
       </label>
 
       <label class="full-width">
         Napomena
-        <textarea name="notes" rows="3"></textarea>
+        <textarea name="notes" rows="3" [(ngModel)]="form.notes"></textarea>
       </label>
 
-      <button type="button" class="submit-button">Dodaj vozilo</button>
+      @if (formMessage(); as message) {
+        <p class="empty-message full-width" [class.ok]="message.type === 'success'" [class.error]="message.type === 'error'">
+          {{ message.text }}
+        </p>
+      }
+
+      <button type="submit" class="submit-button" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          Spremanje...
+        } @else {
+          Dodaj vozilo
+        }
+      </button>
     </form>
   </section>
 
