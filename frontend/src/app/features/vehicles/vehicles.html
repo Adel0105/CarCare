@@ -2,7 +2,7 @@
   <h1>Moja vozila</h1>
 
   <section class="add-vehicle">
-    <h2>Dodaj vozilo</h2>
+    <h2>{{ editingVehicle() ? 'Uredi vozilo' : 'Dodaj vozilo' }}</h2>
 
     <form class="vehicle-form" (ngSubmit)="onSubmit()">
       <label>
@@ -42,18 +42,30 @@
       </label>
 
       @if (formMessage(); as message) {
-        <p class="empty-message full-width" [class.ok]="message.type === 'success'" [class.error]="message.type === 'error'">
+        <p
+          class="empty-message full-width"
+          [class.ok]="message.type === 'success'"
+          [class.error]="message.type === 'error'"
+        >
           {{ message.text }}
         </p>
       }
 
-      <button type="submit" class="submit-button" [disabled]="isSubmitting()">
-        @if (isSubmitting()) {
-          Spremanje...
-        } @else {
-          Dodaj vozilo
+      <div class="form-actions">
+        <button type="submit" class="submit-button" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            Spremanje...
+          } @else if (editingVehicle()) {
+            Sačuvaj izmjene
+          } @else {
+            Dodaj vozilo
+          }
+        </button>
+
+        @if (editingVehicle()) {
+          <button type="button" class="cancel-button" (click)="cancelEdit()">Otkaži</button>
         }
-      </button>
+      </div>
     </form>
   </section>
 
@@ -83,6 +95,17 @@
                 <dd>{{ vehicle.currentMileage }} km</dd>
               </div>
             </dl>
+            <div class="card-actions">
+              <button type="button" class="edit-button" (click)="onEdit(vehicle)">Uredi</button>
+              <button
+                type="button"
+                class="delete-button"
+                (click)="onDelete(vehicle)"
+                [disabled]="deletingVehicleId() === vehicle.id || isSubmitting()"
+              >
+                {{ deletingVehicleId() === vehicle.id ? 'Brisanje...' : 'Obriši' }}
+              </button>
+            </div>
           </article>
         }
       </div>

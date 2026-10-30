@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { CreateVehicle, Vehicle } from './vehicle';
+import { CreateVehicle, UpdateVehicle, Vehicle } from './vehicle';
 
 @Injectable({ providedIn: 'root' })
 export class VehicleService {
@@ -14,5 +14,13 @@ export class VehicleService {
 
   create(vehicle: CreateVehicle): Observable<Vehicle> {
     return this.http.post<Vehicle>('/api/vehicles', vehicle);
+  }
+
+  update(id: number, vehicle: UpdateVehicle): Observable<void> {
+    return this.http.put<void>(`/api/vehicles/${id}`, vehicle);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`/api/vehicles/${id}`);
   }
 }
