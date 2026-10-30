@@ -45,7 +45,9 @@ export class Vehicles {
     notes: '',
   };
 
+  protected readonly editingVehicle = signal<Vehicle | null>(null);
   protected readonly isSubmitting = signal(false);
+  protected readonly deletingVehicleId = signal<number | null>(null);
   protected readonly formMessage = signal<FormMessage | null>(null);
 
   protected readonly vehicles$: Observable<VehiclesViewState> = this.reload$.pipe(
@@ -57,6 +59,63 @@ export class Vehicles {
       ),
     ),
   );
+
+  protected onEdit(vehicle: Vehicle): void {
+    this.editingVehicle.set(vehicle);
+    this.form.make = vehicle.make;
+    this.form.model = vehicle.model;
+    this.form.year = vehicle.year;
+    this.form.licensePlate = vehicle.licensePlate;
+    this.form.currentMileage = vehicle.currentMileage;
+    this.form.notes = vehicle.notes ?? '';
+    this.formMessage.set(null);
+  }
+
+  protected cancelEdit(): void {
+    this.editingVehicle.set(null);
+    this.resetForm();
+    this.formMessage.set(null);
+  }
+
+  protected onDelete(vehicle: Vehicle): void {
+    if (this.deletingVehicleId() !== null || this.isSubmitting()) {
+      return;
+    }
+
+    const confirmed = confirm(
+      `Jesi li siguran da želiš obrisati vozilo ${vehicle.make} ${vehicle.model}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.deletingVehicleId.set(vehicle.id);
+    this.formMessage.set(null);
+
+    this.vehicleService.delete(vehicle.id).subscribe({
+      next: () => {
+        if (this.editingVehicle()?.id === vehicle.id) {
+          this.editingVehicle.set(null);
+          this.resetForm();
+        }
+
+        this.deletingVehicleId.set(null);
+        this.formMessage.set({
+          type: 'success',
+          text: 'Vozilo je uspješno obrisano.',
+        });
+        this.reload$.next();
+      },
+      error: () => {
+        this.deletingVehicleId.set(null);
+        this.formMessage.set({
+          type: 'error',
+          text: 'Greška pri brisanju vozila. Pokušaj ponovo.',
+        });
+      },
+    });
+  }
 
   protected onSubmit(): void {
     if (this.isSubmitting()) {
@@ -86,8 +145,33 @@ export class Vehicles {
       notes: this.form.notes.trim() ? this.form.notes.trim() : null,
     };
 
+    const editing = this.editingVehicle();
+
     this.isSubmitting.set(true);
     this.formMessage.set(null);
+
+    if (editing) {
+      this.vehicleService.update(editing.id, payload).subscribe({
+        next: () => {
+          this.editingVehicle.set(null);
+          this.resetForm();
+          this.isSubmitting.set(false);
+          this.formMessage.set({
+            type: 'success',
+            text: 'Vozilo je uspješno ažurirano.',
+          });
+          this.reload$.next();
+        },
+        error: () => {
+          this.isSubmitting.set(false);
+          this.formMessage.set({
+            type: 'error',
+            text: 'Greška pri ažuriranju vozila. Pokušaj ponovo.',
+          });
+        },
+      });
+      return;
+    }
 
     this.vehicleService.create(payload).subscribe({
       next: () => {

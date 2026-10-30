@@ -16,3 +16,6 @@ export interface CreateVehicle {
   currentMileage: number;
   notes: string | null;
 }
+
+/** Same body shape as create; matches backend UpdateVehicleDto. */
+export type UpdateVehicle = CreateVehicle;
