@@ -101,6 +101,8 @@
 .cancel-button,
 .edit-button,
 .delete-button {
+  display: inline-flex;
+  align-items: center;
   padding: 0.55rem 0.95rem;
   border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
   border-radius: 0.5rem;
@@ -108,6 +110,7 @@
   color: var(--color-primary);
   font: inherit;
   font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
 }
 

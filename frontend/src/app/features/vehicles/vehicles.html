@@ -97,6 +97,12 @@
             </dl>
             <div class="card-actions">
               <button type="button" class="edit-button" (click)="onEdit(vehicle)">Uredi</button>
+              <a
+                class="edit-button"
+                [routerLink]="['/vehicles', vehicle.id, 'maintenance-records']"
+              >
+                Održavanje
+              </a>
               <button
                 type="button"
                 class="delete-button"
