@@ -1,0 +1,101 @@
+<section class="maintenance-records-page">
+  <h1>Održavanje</h1>
+
+  <section class="add-record">
+    <h2>Dodaj zapis održavanja</h2>
+
+    <form class="record-form" (ngSubmit)="onSubmit()">
+      <label>
+        Naziv servisa/popravke
+        <input type="text" name="title" [(ngModel)]="form.title" required />
+      </label>
+
+      <label>
+        Datum
+        <input type="date" name="date" [(ngModel)]="form.date" required />
+      </label>
+
+      <label>
+        Kilometraža
+        <input type="number" name="mileage" [(ngModel)]="form.mileage" required min="0" />
+      </label>
+
+      <label>
+        Tip zapisa
+        <select name="type" [(ngModel)]="form.type" required>
+          <option [ngValue]="MaintenanceType.Service">Servis</option>
+          <option [ngValue]="MaintenanceType.Repair">Popravka</option>
+          <option [ngValue]="MaintenanceType.Other">Ostalo</option>
+        </select>
+      </label>
+
+      <label>
+        Cijena (KM)
+        <input type="number" name="cost" [(ngModel)]="form.cost" required min="0" step="0.01" />
+      </label>
+
+      <label class="full-width">
+        Opis
+        <textarea name="description" rows="3" [(ngModel)]="form.description"></textarea>
+      </label>
+
+      @if (formMessage(); as message) {
+        <p
+          class="empty-message full-width"
+          [class.ok]="message.type === 'success'"
+          [class.error]="message.type === 'error'"
+        >
+          {{ message.text }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button type="submit" class="submit-button" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Spremanje...' : 'Dodaj zapis' }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  @if (viewState(); as state) {
+    @if (state.status === 'loading') {
+      <p class="empty-message">Učitavanje zapisa održavanja...</p>
+    } @else if (state.status === 'error') {
+      <p class="empty-message error">Greška pri učitavanju zapisa. Pokušaj ponovo.</p>
+    } @else if (state.records.length === 0) {
+      <p class="empty-message">Za ovo vozilo još nema evidentiranih servisa i popravki.</p>
+    } @else {
+      <div class="record-grid">
+        @for (record of state.records; track record.id) {
+          <article class="record-card">
+            <h2 class="record-title">{{ record.title }}</h2>
+            <dl class="record-details">
+              <div>
+                <dt>Datum</dt>
+                <dd>{{ record.date }}</dd>
+              </div>
+              <div>
+                <dt>Kilometraža</dt>
+                <dd>{{ record.mileage }} km</dd>
+              </div>
+              <div>
+                <dt>Tip</dt>
+                <dd>{{ typeLabel(record.type) }}</dd>
+              </div>
+              <div>
+                <dt>Cijena</dt>
+                <dd>{{ record.cost }} KM</dd>
+              </div>
+              @if (record.description) {
+                <div class="description">
+                  <dt>Opis</dt>
+                  <dd>{{ record.description }}</dd>
+                </div>
+              }
+            </dl>
+          </article>
+        }
+      </div>
+    }
+  }
+</section>

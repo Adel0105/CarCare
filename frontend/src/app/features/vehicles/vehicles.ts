@@ -1,6 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, map, of, startWith, switchMap } from 'rxjs';
 
 import { CreateVehicle, Vehicle } from './vehicle';
@@ -27,7 +28,7 @@ interface FormMessage {
 
 @Component({
   selector: 'app-vehicles',
-  imports: [AsyncPipe, FormsModule],
+  imports: [AsyncPipe, FormsModule, RouterLink],
   templateUrl: './vehicles.html',
   styleUrl: './vehicles.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

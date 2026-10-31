@@ -17,6 +17,14 @@ export const routes: Routes = [
         title: 'Moja vozila',
         loadComponent: () => import('./features/vehicles/vehicles').then((m) => m.Vehicles),
       },
+      {
+        path: 'vehicles/:vehicleId/maintenance-records',
+        title: 'Održavanje',
+        loadComponent: () =>
+          import('./features/maintenance-records/maintenance-records').then(
+            (m) => m.MaintenanceRecords,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

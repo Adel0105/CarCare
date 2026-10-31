@@ -1,0 +1,151 @@
+.maintenance-records-page h1 {
+  margin: 0 0 1.25rem;
+  font-size: 1.75rem;
+  color: var(--color-primary);
+}
+
+.add-record {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.add-record h2 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+}
+
+.record-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+.record-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.record-form .full-width {
+  grid-column: 1 / -1;
+}
+
+.record-form input,
+.record-form select,
+.record-form textarea {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: #ffffff;
+}
+
+.record-form input:focus,
+.record-form select:focus,
+.record-form textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  outline-offset: 1px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.submit-button {
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  filter: brightness(1.08);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.empty-message {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.empty-message.ok {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.empty-message.error {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.record-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+.record-card {
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.record-title {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.record-details {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .description {
+    grid-column: 1 / -1;
+  }
+
+  dt {
+    margin: 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+}
