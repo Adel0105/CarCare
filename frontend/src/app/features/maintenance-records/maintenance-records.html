@@ -1,8 +1,8 @@
 <section class="maintenance-records-page">
   <h1>Održavanje</h1>
 
-  <section class="add-record">
-    <h2>Dodaj zapis održavanja</h2>
+  <section class="add-record" [class.editing]="editingRecord()">
+    <h2>{{ editingRecord() ? 'Uredi zapis održavanja' : 'Dodaj zapis održavanja' }}</h2>
 
     <form class="record-form" (ngSubmit)="onSubmit()">
       <label>
@@ -51,8 +51,18 @@
 
       <div class="form-actions">
         <button type="submit" class="submit-button" [disabled]="isSubmitting()">
-          {{ isSubmitting() ? 'Spremanje...' : 'Dodaj zapis' }}
+          @if (isSubmitting()) {
+            Spremanje...
+          } @else if (editingRecord()) {
+            Sačuvaj izmjene
+          } @else {
+            Dodaj zapis
+          }
         </button>
+
+        @if (editingRecord()) {
+          <button type="button" class="cancel-button" (click)="cancelEditing()">Odustani</button>
+        }
       </div>
     </form>
   </section>
@@ -93,6 +103,17 @@
                 </div>
               }
             </dl>
+            <div class="card-actions">
+              <button type="button" class="edit-button" (click)="startEditing(record)">Uredi</button>
+              <button
+                type="button"
+                class="delete-button"
+                (click)="deleteRecord(record)"
+                [disabled]="deletingRecordId() === record.id || isSubmitting()"
+              >
+                {{ deletingRecordId() === record.id ? 'Brisanje...' : 'Obriši' }}
+              </button>
+            </div>
           </article>
         }
       </div>

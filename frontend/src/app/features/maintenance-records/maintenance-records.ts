@@ -51,6 +51,8 @@ export class MaintenanceRecords implements OnInit {
   protected readonly viewState = signal<MaintenanceRecordsViewState>({ status: 'loading' });
   protected readonly formMessage = signal<FormMessage | null>(null);
   protected readonly isSubmitting = signal(false);
+  protected readonly deletingRecordId = signal<number | null>(null);
+  protected readonly editingRecord = signal<MaintenanceRecord | null>(null);
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -59,8 +61,73 @@ export class MaintenanceRecords implements OnInit {
     });
   }
 
+  protected startEditing(record: MaintenanceRecord): void {
+    this.editingRecord.set(record);
+    this.form.date = record.date;
+    this.form.mileage = record.mileage;
+    this.form.title = record.title;
+    this.form.type = record.type;
+    this.form.description = record.description ?? '';
+    this.form.cost = record.cost;
+    this.formMessage.set(null);
+  }
+
+  protected cancelEditing(): void {
+    this.editingRecord.set(null);
+    this.resetForm();
+    this.formMessage.set(null);
+  }
+
+  protected deleteRecord(record: MaintenanceRecord): void {
+    if (this.deletingRecordId() !== null || this.isSubmitting()) {
+      return;
+    }
+
+    if (this.vehicleId === null || Number.isNaN(this.vehicleId)) {
+      this.formMessage.set({
+        type: 'error',
+        text: 'Greška pri brisanju zapisa. Pokušaj ponovo.',
+      });
+      return;
+    }
+
+    const confirmed = confirm(
+      `Jesi li siguran da želiš obrisati zapis „${record.title}"?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.deletingRecordId.set(record.id);
+    this.formMessage.set(null);
+
+    this.maintenanceRecordService.delete(this.vehicleId, record.id).subscribe({
+      next: () => {
+        if (this.editingRecord()?.id === record.id) {
+          this.editingRecord.set(null);
+          this.resetForm();
+        }
+
+        this.deletingRecordId.set(null);
+        this.formMessage.set({
+          type: 'success',
+          text: 'Zapis održavanja je uspješno obrisan.',
+        });
+        this.loadRecords();
+      },
+      error: () => {
+        this.deletingRecordId.set(null);
+        this.formMessage.set({
+          type: 'error',
+          text: 'Greška pri brisanju zapisa. Pokušaj ponovo.',
+        });
+      },
+    });
+  }
+
   protected onSubmit(): void {
-    if (this.isSubmitting()) {
+    if (this.isSubmitting() || this.deletingRecordId() !== null) {
       return;
     }
 
@@ -97,8 +164,33 @@ export class MaintenanceRecords implements OnInit {
       cost: this.form.cost,
     };
 
+    const editing = this.editingRecord();
+
     this.isSubmitting.set(true);
     this.formMessage.set(null);
+
+    if (editing) {
+      this.maintenanceRecordService.update(this.vehicleId, editing.id, payload).subscribe({
+        next: () => {
+          this.editingRecord.set(null);
+          this.resetForm();
+          this.isSubmitting.set(false);
+          this.formMessage.set({
+            type: 'success',
+            text: 'Zapis održavanja je uspješno ažuriran.',
+          });
+          this.loadRecords();
+        },
+        error: () => {
+          this.isSubmitting.set(false);
+          this.formMessage.set({
+            type: 'error',
+            text: 'Greška pri ažuriranju zapisa. Pokušaj ponovo.',
+          });
+        },
+      });
+      return;
+    }
 
     this.maintenanceRecordService.create(this.vehicleId, payload).subscribe({
       next: () => {
