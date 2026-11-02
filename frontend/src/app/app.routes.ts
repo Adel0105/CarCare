@@ -25,6 +25,11 @@ export const routes: Routes = [
             (m) => m.MaintenanceRecords,
           ),
       },
+      {
+        path: 'vehicles/:vehicleId/expenses',
+        title: 'Troškovi',
+        loadComponent: () => import('./features/expenses/expenses').then((m) => m.Expenses),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
