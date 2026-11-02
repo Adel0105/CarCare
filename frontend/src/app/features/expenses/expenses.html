@@ -1,0 +1,117 @@
+<section class="expenses-page">
+  <h1>Troškovi</h1>
+
+  <section class="add-expense" [class.editing]="editingExpense()">
+    <h2>{{ editingExpense() ? 'Uredi trošak' : 'Dodaj novi trošak' }}</h2>
+
+    <form class="expense-form" (ngSubmit)="onSubmit()">
+      <label>
+        Datum
+        <input type="date" name="date" [(ngModel)]="form.date" required />
+      </label>
+
+      <label>
+        Iznos (KM)
+        <input type="number" name="amount" [(ngModel)]="form.amount" required min="0.01" step="0.01" />
+      </label>
+
+      <label>
+        Kategorija
+        <select name="category" [(ngModel)]="form.category" required>
+          <option [ngValue]="ExpenseCategory.Fuel">Gorivo</option>
+          <option [ngValue]="ExpenseCategory.Insurance">Osiguranje</option>
+          <option [ngValue]="ExpenseCategory.Registration">Registracija</option>
+          <option [ngValue]="ExpenseCategory.Parking">Parking</option>
+          <option [ngValue]="ExpenseCategory.Other">Ostalo</option>
+        </select>
+      </label>
+
+      <label>
+        Kilometraža
+        <input type="number" name="mileage" [(ngModel)]="form.mileage" min="0" />
+      </label>
+
+      <label class="full-width">
+        Opis
+        <textarea name="description" rows="3" [(ngModel)]="form.description"></textarea>
+      </label>
+
+      @if (formMessage(); as message) {
+        <p
+          class="empty-message full-width"
+          [class.ok]="message.type === 'success'"
+          [class.error]="message.type === 'error'"
+        >
+          {{ message.text }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button type="submit" class="submit-button" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            Spremanje...
+          } @else if (editingExpense()) {
+            Sačuvaj izmjene
+          } @else {
+            Dodaj trošak
+          }
+        </button>
+
+        @if (editingExpense()) {
+          <button type="button" class="cancel-button" (click)="cancelEditing()">Odustani</button>
+        }
+      </div>
+    </form>
+  </section>
+
+  @if (viewState(); as state) {
+    @if (state.status === 'loading') {
+      <p class="empty-message">Učitavanje troškova...</p>
+    } @else if (state.status === 'error') {
+      <p class="empty-message error">Greška pri učitavanju troškova. Pokušaj ponovo.</p>
+    } @else if (state.expenses.length === 0) {
+      <p class="empty-message">Za ovo vozilo još nema evidentiranih troškova.</p>
+    } @else {
+      <div class="expense-grid">
+        @for (expense of state.expenses; track expense.id) {
+          <article class="expense-card">
+            <h2 class="expense-title">{{ categoryLabel(expense.category) }}</h2>
+            <dl class="expense-details">
+              <div>
+                <dt>Datum</dt>
+                <dd>{{ expense.date }}</dd>
+              </div>
+              <div>
+                <dt>Iznos</dt>
+                <dd>{{ expense.amount }} KM</dd>
+              </div>
+              @if (expense.mileage !== null) {
+                <div>
+                  <dt>Kilometraža</dt>
+                  <dd>{{ expense.mileage }} km</dd>
+                </div>
+              }
+              @if (expense.description) {
+                <div class="description">
+                  <dt>Opis</dt>
+                  <dd>{{ expense.description }}</dd>
+                </div>
+              }
+            </dl>
+            <div class="card-actions">
+              <button type="button" class="edit-button" (click)="startEditing(expense)">Uredi</button>
+              <button
+                type="button"
+                class="delete-button"
+                (click)="deleteExpense(expense)"
+                [disabled]="deletingExpenseId() === expense.id || isSubmitting()"
+              >
+                {{ deletingExpenseId() === expense.id ? 'Brisanje...' : 'Obriši' }}
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  }
+</section>
