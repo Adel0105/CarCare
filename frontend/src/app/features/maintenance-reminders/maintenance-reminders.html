@@ -1,0 +1,45 @@
+<section class="maintenance-reminders-page">
+  <h1>Podsjetnici</h1>
+
+  @if (viewState(); as state) {
+    @if (state.status === 'loading') {
+      <p class="empty-message">Učitavanje podsjetnika...</p>
+    } @else if (state.status === 'error') {
+      <p class="empty-message error">Greška pri učitavanju podsjetnika. Pokušaj ponovo.</p>
+    } @else if (state.reminders.length === 0) {
+      <p class="empty-message">Za ovo vozilo još nema evidentiranih podsjetnika.</p>
+    } @else {
+      <div class="reminder-grid">
+        @for (reminder of state.reminders; track reminder.id) {
+          <article class="reminder-card" [class.completed]="reminder.isCompleted">
+            <h2 class="reminder-title">{{ reminder.title }}</h2>
+            <dl class="reminder-details">
+              <div>
+                <dt>Status</dt>
+                <dd>{{ statusLabel(reminder.isCompleted) }}</dd>
+              </div>
+              @if (reminder.dueDate) {
+                <div>
+                  <dt>Rok (datum)</dt>
+                  <dd>{{ reminder.dueDate }}</dd>
+                </div>
+              }
+              @if (reminder.dueMileage !== null) {
+                <div>
+                  <dt>Rok (kilometraža)</dt>
+                  <dd>{{ reminder.dueMileage }} km</dd>
+                </div>
+              }
+              @if (reminder.notes) {
+                <div class="notes">
+                  <dt>Napomena</dt>
+                  <dd>{{ reminder.notes }}</dd>
+                </div>
+              }
+            </dl>
+          </article>
+        }
+      </div>
+    }
+  }
+</section>

@@ -30,6 +30,14 @@ export const routes: Routes = [
         title: 'Troškovi',
         loadComponent: () => import('./features/expenses/expenses').then((m) => m.Expenses),
       },
+      {
+        path: 'vehicles/:vehicleId/maintenance-reminders',
+        title: 'Podsjetnici',
+        loadComponent: () =>
+          import('./features/maintenance-reminders/maintenance-reminders').then(
+            (m) => m.MaintenanceReminders,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
