@@ -4,10 +4,137 @@
   color: var(--color-primary);
 }
 
+.add-reminder {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.add-reminder.editing {
+  border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.add-reminder h2 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+}
+
+.reminder-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+.reminder-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.reminder-form .full-width {
+  grid-column: 1 / -1;
+}
+
+.reminder-form input,
+.reminder-form textarea {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: #ffffff;
+}
+
+.reminder-form input:focus,
+.reminder-form textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  outline-offset: 1px;
+}
+
+.form-hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  line-height: 1.4;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.submit-button {
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  filter: brightness(1.08);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.cancel-button,
+.edit-button,
+.delete-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-button:hover,
+.edit-button:hover,
+.delete-button:hover {
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.delete-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
 .empty-message {
   margin: 0;
   color: var(--color-muted);
   line-height: 1.5;
+}
+
+.empty-message.ok {
+  color: var(--color-success);
+  font-weight: 600;
 }
 
 .empty-message.error {
