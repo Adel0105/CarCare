@@ -1,3 +1,4 @@
+using CarCare.Application.Dashboard;
 using CarCare.Application.Expenses;
 using CarCare.Application.Expenses.Interfaces;
 using CarCare.Application.MaintenanceRecords;
@@ -18,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<IMaintenanceRecordService, MaintenanceRecordService>();
         services.AddScoped<IMaintenanceReminderService, MaintenanceReminderService>();
+        services.AddScoped<IDashboardService, DashboardService>();
 
         return services;
     }
