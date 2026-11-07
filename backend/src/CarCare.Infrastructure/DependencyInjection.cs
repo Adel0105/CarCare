@@ -1,7 +1,9 @@
+using CarCare.Application.Dashboard.Interfaces;
 using CarCare.Application.Expenses.Interfaces;
 using CarCare.Application.MaintenanceRecords.Interfaces;
 using CarCare.Application.MaintenanceReminders.Interfaces;
 using CarCare.Application.Vehicles.Interfaces;
+using CarCare.Infrastructure.Dashboard;
 using CarCare.Infrastructure.Expenses;
 using CarCare.Infrastructure.MaintenanceRecords;
 using CarCare.Infrastructure.MaintenanceReminders;
@@ -32,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IMaintenanceRecordWriteStore, MaintenanceRecordWriteStore>();
         services.AddScoped<IMaintenanceReminderReadStore, MaintenanceReminderReadStore>();
         services.AddScoped<IMaintenanceReminderWriteStore, MaintenanceReminderWriteStore>();
+        services.AddScoped<IDashboardReadStore, DashboardReadStore>();
 
         return services;
     }
