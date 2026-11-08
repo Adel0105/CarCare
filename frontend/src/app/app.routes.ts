@@ -13,6 +13,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/home/home').then((m) => m.Home),
       },
       {
+        path: 'dashboard',
+        title: 'Dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      },
+      {
         path: 'vehicles',
         title: 'Moja vozila',
         loadComponent: () => import('./features/vehicles/vehicles').then((m) => m.Vehicles),
