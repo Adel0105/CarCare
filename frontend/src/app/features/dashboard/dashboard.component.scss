@@ -1,0 +1,441 @@
+:host {
+  display: block;
+}
+
+.dashboard-page {
+  --dash-surface: #ffffff;
+  --dash-border: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --dash-shadow: 0 8px 24px color-mix(in srgb, var(--color-text) 6%, transparent);
+  --dash-radius: 1rem;
+  --dash-green: var(--color-success);
+  --dash-red: var(--color-danger);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.dashboard-header {
+  padding: 0.25rem 0 0.5rem;
+}
+
+.dashboard-eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  opacity: 0.75;
+}
+
+.dashboard-header h1 {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.85rem, 2.5vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+  line-height: 1.15;
+}
+
+.dashboard-subtitle {
+  margin: 0;
+  max-width: 36rem;
+  color: var(--color-muted);
+  line-height: 1.55;
+  font-size: 1rem;
+}
+
+.empty-message {
+  margin: 0;
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--dash-radius);
+  border: 1px solid var(--dash-border);
+  background: var(--dash-surface);
+  color: var(--color-muted);
+  line-height: 1.5;
+  box-shadow: var(--dash-shadow);
+}
+
+.empty-message.error {
+  color: var(--dash-red);
+  font-weight: 600;
+  border-color: color-mix(in srgb, var(--dash-red) 30%, transparent);
+  background: color-mix(in srgb, var(--dash-red) 5%, #ffffff);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat-card,
+.overdue-section,
+.panel,
+.activity-card {
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  background: var(--dash-surface);
+  box-shadow: var(--dash-shadow);
+}
+
+.stat-card {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  padding: 1.2rem 1.25rem;
+}
+
+.stat-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+.accent-vehicles .stat-icon {
+  background: var(--color-primary);
+}
+
+.accent-total .stat-icon {
+  background: color-mix(in srgb, var(--color-primary) 75%, #0b7285);
+}
+
+.accent-month .stat-icon {
+  background: color-mix(in srgb, var(--dash-green) 85%, var(--color-primary));
+}
+
+.accent-reminders .stat-icon {
+  background: color-mix(in srgb, var(--color-primary) 70%, #d97706);
+}
+
+.stat-body {
+  min-width: 0;
+}
+
+.stat-label {
+  margin: 0 0 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.stat-value {
+  margin: 0;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  word-break: break-word;
+}
+
+.overdue-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.25rem 1.4rem;
+}
+
+.overdue-copy h2,
+.panel-header h2,
+.recent-maintenance > .panel-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 750;
+  color: var(--color-primary);
+}
+
+.overdue-note,
+.panel-subtitle {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.overdue-count {
+  margin: 0;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+}
+
+.overdue-section.overdue-alert {
+  border-color: color-mix(in srgb, var(--dash-red) 40%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--dash-red) 7%, #ffffff),
+    #ffffff
+  );
+}
+
+.overdue-section.overdue-alert h2,
+.overdue-section.overdue-alert .overdue-count {
+  color: var(--dash-red);
+}
+
+.overdue-section.overdue-ok {
+  border-color: color-mix(in srgb, var(--dash-green) 35%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--dash-green) 7%, #ffffff),
+    #ffffff
+  );
+}
+
+.overdue-section.overdue-ok h2,
+.overdue-section.overdue-ok .overdue-count {
+  color: var(--dash-green);
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.panel {
+  padding: 1.35rem 1.4rem 1.5rem;
+  min-width: 0;
+}
+
+.panel-header {
+  margin-bottom: 1.15rem;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.category-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.category-name {
+  font-weight: 650;
+  color: var(--color-text);
+}
+
+.category-amount {
+  font-weight: 750;
+  color: var(--color-primary);
+}
+
+.category-bar-track {
+  width: 100%;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 10%, #eef2f6);
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    color-mix(in srgb, var(--color-primary) 65%, #38bdf8)
+  );
+  min-width: 0;
+}
+
+.monthly-chart {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.85rem;
+  align-items: end;
+  min-height: 15rem;
+  padding-top: 0.35rem;
+}
+
+.monthly-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.monthly-amount {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.monthly-bar-track {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 3rem;
+  height: 10.5rem;
+  border-radius: 0.65rem 0.65rem 0.35rem 0.35rem;
+  background: color-mix(in srgb, var(--color-primary) 8%, #eef2f6);
+  overflow: hidden;
+}
+
+.monthly-bar-fill {
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-primary) 70%, #38bdf8),
+    var(--color-primary)
+  );
+  min-height: 0.4rem;
+}
+
+.monthly-bar-fill.is-zero {
+  height: 0.4rem !important;
+  background: color-mix(in srgb, var(--color-primary) 28%, transparent);
+}
+
+.monthly-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.recent-maintenance > .panel-header {
+  margin-bottom: 1rem;
+}
+
+.activity-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+  gap: 1rem;
+}
+
+.activity-card {
+  padding: 1.2rem 1.25rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.activity-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 750;
+  color: var(--color-primary);
+  line-height: 1.3;
+}
+
+.activity-cost {
+  margin: 0;
+  flex: 0 0 auto;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--dash-green);
+  background: color-mix(in srgb, var(--dash-green) 12%, #ffffff);
+  white-space: nowrap;
+}
+
+.activity-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-primary) 10%, transparent);
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  dt {
+    margin: 0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 650;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 64rem) {
+  .stats-grid,
+  .charts-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 48rem) {
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 40rem) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .overdue-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .monthly-chart {
+    gap: 0.45rem;
+    min-height: 12.5rem;
+  }
+
+  .monthly-bar-track {
+    height: 8.5rem;
+    max-width: 2.15rem;
+  }
+
+  .monthly-amount {
+    font-size: 0.62rem;
+  }
+}

@@ -56,6 +56,45 @@ public class DashboardReadStore(CarCareDbContext dbContext) : IDashboardReadStor
             .Take(5)
             .ToListAsync(cancellationToken);
 
+        var expensesByCategory = await _dbContext.Expenses
+            .GroupBy(expense => expense.Category)
+            .Select(group => new DashboardExpenseCategoryDto
+            {
+                Category = group.Key,
+                Amount = group.Sum(expense => expense.Amount),
+            })
+            .ToListAsync(cancellationToken);
+
+        var sixMonthStart = monthStart.AddMonths(-5);
+
+        var monthlyExpensesRaw = await _dbContext.Expenses
+            .Where(expense => expense.Date >= sixMonthStart && expense.Date < nextMonthStart)
+            .GroupBy(expense => new { expense.Date.Year, expense.Date.Month })
+            .Select(group => new DashboardMonthlyExpenseDto
+            {
+                Year = group.Key.Year,
+                Month = group.Key.Month,
+                Amount = group.Sum(expense => expense.Amount),
+            })
+            .ToListAsync(cancellationToken);
+
+        var monthlyExpenses = new List<DashboardMonthlyExpenseDto>(6);
+        for (var offset = 0; offset < 6; offset++)
+        {
+            var period = sixMonthStart.AddMonths(offset);
+            var existing = monthlyExpensesRaw.FirstOrDefault(item =>
+                item.Year == period.Year && item.Month == period.Month);
+
+            monthlyExpenses.Add(
+                existing
+                    ?? new DashboardMonthlyExpenseDto
+                    {
+                        Year = period.Year,
+                        Month = period.Month,
+                        Amount = 0m,
+                    });
+        }
+
         return new DashboardDto
         {
             TotalVehicles = totalVehicles,
@@ -64,6 +103,8 @@ public class DashboardReadStore(CarCareDbContext dbContext) : IDashboardReadStor
             ActiveRemindersCount = activeRemindersCount,
             OverdueRemindersCount = overdueRemindersCount,
             RecentMaintenance = recentMaintenance,
+            ExpensesByCategory = expensesByCategory,
+            MonthlyExpenses = monthlyExpenses,
         };
     }
 }

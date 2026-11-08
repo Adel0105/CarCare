@@ -13,4 +13,8 @@ public class DashboardDto
     public int OverdueRemindersCount { get; set; }
 
     public IReadOnlyList<DashboardMaintenanceActivityDto> RecentMaintenance { get; set; } = [];
+
+    public IReadOnlyList<DashboardExpenseCategoryDto> ExpensesByCategory { get; set; } = [];
+
+    public IReadOnlyList<DashboardMonthlyExpenseDto> MonthlyExpenses { get; set; } = [];
 }
