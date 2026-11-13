@@ -84,7 +84,7 @@ export class Vehicles {
     }
 
     const confirmed = confirm(
-      `Jesi li siguran da želiš obrisati vozilo ${vehicle.make} ${vehicle.model}?`,
+      `Are you sure you want to delete ${vehicle.make} ${vehicle.model}?`,
     );
 
     if (!confirmed) {
@@ -104,7 +104,7 @@ export class Vehicles {
         this.deletingVehicleId.set(null);
         this.formMessage.set({
           type: 'success',
-          text: 'Vozilo je uspješno obrisano.',
+          text: 'Vehicle deleted successfully.',
         });
         this.reload$.next();
       },
@@ -112,7 +112,7 @@ export class Vehicles {
         this.deletingVehicleId.set(null);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri brisanju vozila. Pokušaj ponovo.',
+          text: 'Failed to delete vehicle. Please try again.',
         });
       },
     });
@@ -132,7 +132,7 @@ export class Vehicles {
     ) {
       this.formMessage.set({
         type: 'error',
-        text: 'Popuni sva obavezna polja.',
+        text: 'Please fill in all required fields.',
       });
       return;
     }
@@ -159,18 +159,18 @@ export class Vehicles {
           this.isSubmitting.set(false);
           this.formMessage.set({
             type: 'success',
-            text: 'Vozilo je uspješno ažurirano.',
-          });
-          this.reload$.next();
-        },
-        error: () => {
-          this.isSubmitting.set(false);
-          this.formMessage.set({
-            type: 'error',
-            text: 'Greška pri ažuriranju vozila. Pokušaj ponovo.',
-          });
-        },
-      });
+          text: 'Vehicle updated successfully.',
+        });
+        this.reload$.next();
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        this.formMessage.set({
+          type: 'error',
+          text: 'Failed to update vehicle. Please try again.',
+        });
+      },
+    });
       return;
     }
 
@@ -180,7 +180,7 @@ export class Vehicles {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'success',
-          text: 'Vozilo je uspješno dodano.',
+          text: 'Vehicle added successfully.',
         });
         this.reload$.next();
       },
@@ -188,7 +188,7 @@ export class Vehicles {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri dodavanju vozila. Pokušaj ponovo.',
+          text: 'Failed to add vehicle. Please try again.',
         });
       },
     });

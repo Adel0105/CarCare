@@ -1,38 +1,38 @@
 <section class="expenses-page">
-  <h1>Troškovi</h1>
+  <h1>Expenses</h1>
 
   <section class="add-expense" [class.editing]="editingExpense()">
-    <h2>{{ editingExpense() ? 'Uredi trošak' : 'Dodaj novi trošak' }}</h2>
+    <h2>{{ editingExpense() ? 'Edit Expense' : 'Add Expense' }}</h2>
 
     <form class="expense-form" (ngSubmit)="onSubmit()">
       <label>
-        Datum
+        Date
         <input type="date" name="date" [(ngModel)]="form.date" required />
       </label>
 
       <label>
-        Iznos (KM)
+        Amount (KM)
         <input type="number" name="amount" [(ngModel)]="form.amount" required min="0.01" step="0.01" />
       </label>
 
       <label>
-        Kategorija
+        Category
         <select name="category" [(ngModel)]="form.category" required>
-          <option [ngValue]="ExpenseCategory.Fuel">Gorivo</option>
-          <option [ngValue]="ExpenseCategory.Insurance">Osiguranje</option>
-          <option [ngValue]="ExpenseCategory.Registration">Registracija</option>
+          <option [ngValue]="ExpenseCategory.Fuel">Fuel</option>
+          <option [ngValue]="ExpenseCategory.Insurance">Insurance</option>
+          <option [ngValue]="ExpenseCategory.Registration">Registration</option>
           <option [ngValue]="ExpenseCategory.Parking">Parking</option>
-          <option [ngValue]="ExpenseCategory.Other">Ostalo</option>
+          <option [ngValue]="ExpenseCategory.Other">Other</option>
         </select>
       </label>
 
       <label>
-        Kilometraža
+        Mileage
         <input type="number" name="mileage" [(ngModel)]="form.mileage" min="0" />
       </label>
 
       <label class="full-width">
-        Opis
+        Description
         <textarea name="description" rows="3" [(ngModel)]="form.description"></textarea>
       </label>
 
@@ -49,16 +49,16 @@
       <div class="form-actions">
         <button type="submit" class="submit-button" [disabled]="isSubmitting()">
           @if (isSubmitting()) {
-            Spremanje...
+            Saving...
           } @else if (editingExpense()) {
-            Sačuvaj izmjene
+            Save Changes
           } @else {
-            Dodaj trošak
+            Add Expense
           }
         </button>
 
         @if (editingExpense()) {
-          <button type="button" class="cancel-button" (click)="cancelEditing()">Odustani</button>
+          <button type="button" class="cancel-button" (click)="cancelEditing()">Cancel</button>
         }
       </div>
     </form>
@@ -66,11 +66,11 @@
 
   @if (viewState(); as state) {
     @if (state.status === 'loading') {
-      <p class="empty-message">Učitavanje troškova...</p>
+      <p class="empty-message">Loading expenses...</p>
     } @else if (state.status === 'error') {
-      <p class="empty-message error">Greška pri učitavanju troškova. Pokušaj ponovo.</p>
+      <p class="empty-message error">Failed to load expenses. Please try again.</p>
     } @else if (state.expenses.length === 0) {
-      <p class="empty-message">Za ovo vozilo još nema evidentiranih troškova.</p>
+      <p class="empty-message">No expenses recorded for this vehicle yet.</p>
     } @else {
       <div class="expense-grid">
         @for (expense of state.expenses; track expense.id) {
@@ -78,35 +78,35 @@
             <h2 class="expense-title">{{ categoryLabel(expense.category) }}</h2>
             <dl class="expense-details">
               <div>
-                <dt>Datum</dt>
+                <dt>Date</dt>
                 <dd>{{ expense.date }}</dd>
               </div>
               <div>
-                <dt>Iznos</dt>
+                <dt>Amount</dt>
                 <dd>{{ expense.amount }} KM</dd>
               </div>
               @if (expense.mileage !== null) {
                 <div>
-                  <dt>Kilometraža</dt>
+                  <dt>Mileage</dt>
                   <dd>{{ expense.mileage }} km</dd>
                 </div>
               }
               @if (expense.description) {
                 <div class="description">
-                  <dt>Opis</dt>
+                  <dt>Description</dt>
                   <dd>{{ expense.description }}</dd>
                 </div>
               }
             </dl>
             <div class="card-actions">
-              <button type="button" class="edit-button" (click)="startEditing(expense)">Uredi</button>
+              <button type="button" class="edit-button" (click)="startEditing(expense)">Edit</button>
               <button
                 type="button"
                 class="delete-button"
                 (click)="deleteExpense(expense)"
                 [disabled]="deletingExpenseId() === expense.id || isSubmitting()"
               >
-                {{ deletingExpenseId() === expense.id ? 'Brisanje...' : 'Obriši' }}
+                {{ deletingExpenseId() === expense.id ? 'Deleting...' : 'Delete' }}
               </button>
             </div>
           </article>

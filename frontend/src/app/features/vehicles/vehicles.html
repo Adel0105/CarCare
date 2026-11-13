@@ -1,12 +1,12 @@
 <section class="vehicles-page">
-  <h1>Moja vozila</h1>
+  <h1>My Vehicles</h1>
 
   <section class="add-vehicle">
-    <h2>{{ editingVehicle() ? 'Uredi vozilo' : 'Dodaj vozilo' }}</h2>
+    <h2>{{ editingVehicle() ? 'Edit Vehicle' : 'Add Vehicle' }}</h2>
 
     <form class="vehicle-form" (ngSubmit)="onSubmit()">
       <label>
-        Marka
+        Make
         <input type="text" name="make" [(ngModel)]="form.make" required />
       </label>
 
@@ -16,17 +16,17 @@
       </label>
 
       <label>
-        Godina
+        Year
         <input type="number" name="year" [(ngModel)]="form.year" required min="1900" />
       </label>
 
       <label>
-        Registarska oznaka
+        License Plate
         <input type="text" name="licensePlate" [(ngModel)]="form.licensePlate" required />
       </label>
 
       <label>
-        Trenutna kilometraža
+        Current Mileage
         <input
           type="number"
           name="currentMileage"
@@ -37,7 +37,7 @@
       </label>
 
       <label class="full-width">
-        Napomena
+        Notes
         <textarea name="notes" rows="3" [(ngModel)]="form.notes"></textarea>
       </label>
 
@@ -54,16 +54,16 @@
       <div class="form-actions">
         <button type="submit" class="submit-button" [disabled]="isSubmitting()">
           @if (isSubmitting()) {
-            Spremanje...
+            Saving...
           } @else if (editingVehicle()) {
-            Sačuvaj izmjene
+            Save Changes
           } @else {
-            Dodaj vozilo
+            Add Vehicle
           }
         </button>
 
         @if (editingVehicle()) {
-          <button type="button" class="cancel-button" (click)="cancelEdit()">Otkaži</button>
+          <button type="button" class="cancel-button" (click)="cancelEdit()">Cancel</button>
         }
       </div>
     </form>
@@ -71,11 +71,11 @@
 
   @if (vehicles$ | async; as state) {
     @if (state.status === 'loading') {
-      <p class="empty-message">Učitavanje vozila...</p>
+      <p class="empty-message">Loading vehicles...</p>
     } @else if (state.status === 'error') {
-      <p class="empty-message">Greška pri učitavanju vozila. Pokušaj ponovo.</p>
+      <p class="empty-message">Failed to load vehicles. Please try again.</p>
     } @else if (state.vehicles.length === 0) {
-      <p class="empty-message">Nema dodanih vozila.</p>
+      <p class="empty-message">No vehicles added yet.</p>
     } @else {
       <div class="vehicle-grid">
         @for (vehicle of state.vehicles; track vehicle.id) {
@@ -83,34 +83,34 @@
             <h2 class="vehicle-title">{{ vehicle.make }} {{ vehicle.model }}</h2>
             <dl class="vehicle-details">
               <div>
-                <dt>Godina</dt>
+                <dt>Year</dt>
                 <dd>{{ vehicle.year }}</dd>
               </div>
               <div>
-                <dt>Registarska oznaka</dt>
+                <dt>License Plate</dt>
                 <dd>{{ vehicle.licensePlate }}</dd>
               </div>
               <div>
-                <dt>Kilometraža</dt>
+                <dt>Mileage</dt>
                 <dd>{{ vehicle.currentMileage }} km</dd>
               </div>
             </dl>
             <div class="card-actions">
-              <button type="button" class="edit-button" (click)="onEdit(vehicle)">Uredi</button>
+              <button type="button" class="edit-button" (click)="onEdit(vehicle)">Edit</button>
               <a
                 class="edit-button"
                 [routerLink]="['/vehicles', vehicle.id, 'maintenance-records']"
               >
-                Održavanje
+                Maintenance
               </a>
               <a class="edit-button" [routerLink]="['/vehicles', vehicle.id, 'expenses']">
-                Troškovi
+                Expenses
               </a>
               <a
                 class="edit-button"
                 [routerLink]="['/vehicles', vehicle.id, 'maintenance-reminders']"
               >
-                Podsjetnici
+                Reminders
               </a>
               <button
                 type="button"
@@ -118,7 +118,7 @@
                 (click)="onDelete(vehicle)"
                 [disabled]="deletingVehicleId() === vehicle.id || isSubmitting()"
               >
-                {{ deletingVehicleId() === vehicle.id ? 'Brisanje...' : 'Obriši' }}
+                {{ deletingVehicleId() === vehicle.id ? 'Deleting...' : 'Delete' }}
               </button>
             </div>
           </article>

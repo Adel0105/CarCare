@@ -20,12 +20,12 @@ export const routes: Routes = [
       },
       {
         path: 'vehicles',
-        title: 'Moja vozila',
+        title: 'Vehicles',
         loadComponent: () => import('./features/vehicles/vehicles').then((m) => m.Vehicles),
       },
       {
         path: 'vehicles/:vehicleId/maintenance-records',
-        title: 'Održavanje',
+        title: 'Maintenance',
         loadComponent: () =>
           import('./features/maintenance-records/maintenance-records').then(
             (m) => m.MaintenanceRecords,
@@ -33,12 +33,12 @@ export const routes: Routes = [
       },
       {
         path: 'vehicles/:vehicleId/expenses',
-        title: 'Troškovi',
+        title: 'Expenses',
         loadComponent: () => import('./features/expenses/expenses').then((m) => m.Expenses),
       },
       {
         path: 'vehicles/:vehicleId/maintenance-reminders',
-        title: 'Podsjetnici',
+        title: 'Reminders',
         loadComponent: () =>
           import('./features/maintenance-reminders/maintenance-reminders').then(
             (m) => m.MaintenanceReminders,
