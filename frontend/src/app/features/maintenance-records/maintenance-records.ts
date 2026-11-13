@@ -86,13 +86,13 @@ export class MaintenanceRecords implements OnInit {
     if (this.vehicleId === null || Number.isNaN(this.vehicleId)) {
       this.formMessage.set({
         type: 'error',
-        text: 'Greška pri brisanju zapisa. Pokušaj ponovo.',
+        text: 'Failed to delete record. Please try again.',
       });
       return;
     }
 
     const confirmed = confirm(
-      `Jesi li siguran da želiš obrisati zapis „${record.title}"?`,
+      `Are you sure you want to delete "${record.title}"?`,
     );
 
     if (!confirmed) {
@@ -112,7 +112,7 @@ export class MaintenanceRecords implements OnInit {
         this.deletingRecordId.set(null);
         this.formMessage.set({
           type: 'success',
-          text: 'Zapis održavanja je uspješno obrisan.',
+          text: 'Maintenance record deleted successfully.',
         });
         this.loadRecords();
       },
@@ -120,7 +120,7 @@ export class MaintenanceRecords implements OnInit {
         this.deletingRecordId.set(null);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri brisanju zapisa. Pokušaj ponovo.',
+          text: 'Failed to delete record. Please try again.',
         });
       },
     });
@@ -142,7 +142,7 @@ export class MaintenanceRecords implements OnInit {
     ) {
       this.formMessage.set({
         type: 'error',
-        text: 'Popuni sva obavezna polja ispravno.',
+        text: 'Please fill in all required fields correctly.',
       });
       return;
     }
@@ -150,7 +150,7 @@ export class MaintenanceRecords implements OnInit {
     if (this.vehicleId === null || Number.isNaN(this.vehicleId)) {
       this.formMessage.set({
         type: 'error',
-        text: 'Greška pri dodavanju zapisa. Pokušaj ponovo.',
+        text: 'Failed to add record. Please try again.',
       });
       return;
     }
@@ -177,18 +177,18 @@ export class MaintenanceRecords implements OnInit {
           this.isSubmitting.set(false);
           this.formMessage.set({
             type: 'success',
-            text: 'Zapis održavanja je uspješno ažuriran.',
-          });
-          this.loadRecords();
-        },
-        error: () => {
-          this.isSubmitting.set(false);
-          this.formMessage.set({
-            type: 'error',
-            text: 'Greška pri ažuriranju zapisa. Pokušaj ponovo.',
-          });
-        },
-      });
+          text: 'Maintenance record updated successfully.',
+        });
+        this.loadRecords();
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        this.formMessage.set({
+          type: 'error',
+          text: 'Failed to update record. Please try again.',
+        });
+      },
+    });
       return;
     }
 
@@ -198,7 +198,7 @@ export class MaintenanceRecords implements OnInit {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'success',
-          text: 'Zapis održavanja je uspješno dodan.',
+          text: 'Maintenance record added successfully.',
         });
         this.loadRecords();
       },
@@ -206,7 +206,7 @@ export class MaintenanceRecords implements OnInit {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri dodavanju zapisa. Pokušaj ponovo.',
+          text: 'Failed to add record. Please try again.',
         });
       },
     });
@@ -215,11 +215,11 @@ export class MaintenanceRecords implements OnInit {
   protected typeLabel(type: MaintenanceType): string {
     switch (type) {
       case MaintenanceType.Service:
-        return 'Servis';
+        return 'Service';
       case MaintenanceType.Repair:
-        return 'Popravka';
+        return 'Repair';
       case MaintenanceType.Other:
-        return 'Ostalo';
+        return 'Other';
     }
   }
 

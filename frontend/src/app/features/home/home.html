@@ -1,17 +1,17 @@
 <section class="welcome-card">
-  <h1>Dobrodošao u CarCare</h1>
+  <h1>Welcome to CarCare</h1>
   <p>
-    Aplikacija za praćenje vozila, troškova, održavanja i podsjetnika na jednom mjestu.
+    Track your vehicles, expenses, maintenance, and reminders in one place.
   </p>
 
   <p class="status">
     API:
     @if (apiAvailable() === undefined) {
-      <span>provjera...</span>
+      <span>checking...</span>
     } @else if (apiAvailable()) {
-      <span class="ok">dostupan</span>
+      <span class="ok">available</span>
     } @else {
-      <span class="error">nedostupan</span>
+      <span class="error">unavailable</span>
     }
   </p>
 </section>

@@ -1,31 +1,31 @@
 <section class="maintenance-reminders-page">
-  <h1>Podsjetnici</h1>
+  <h1>Reminders</h1>
 
   <section class="add-reminder" [class.editing]="editingReminder()">
-    <h2>{{ editingReminder() ? 'Uredi podsjetnik' : 'Dodaj novi podsjetnik' }}</h2>
+    <h2>{{ editingReminder() ? 'Edit Reminder' : 'Add Reminder' }}</h2>
 
     <form class="reminder-form" (ngSubmit)="onSubmit()">
       <label>
-        Naziv podsjetnika
+        Reminder Title
         <input type="text" name="title" [(ngModel)]="form.title" required />
       </label>
 
       <label>
-        Datum dospijeća
+        Due Date
         <input type="date" name="dueDate" [(ngModel)]="form.dueDate" />
       </label>
 
       <label>
-        Kilometraža
+        Due Mileage
         <input type="number" name="dueMileage" [(ngModel)]="form.dueMileage" min="0" />
       </label>
 
       <label class="full-width">
-        Napomene
+        Notes
         <textarea name="notes" rows="3" [(ngModel)]="form.notes"></textarea>
       </label>
 
-      <p class="form-hint full-width">Unesi barem datum dospijeća ili kilometražu.</p>
+      <p class="form-hint full-width">Enter at least a due date or due mileage.</p>
 
       @if (formMessage(); as message) {
         <p
@@ -40,16 +40,16 @@
       <div class="form-actions">
         <button type="submit" class="submit-button" [disabled]="isSubmitting()">
           @if (isSubmitting()) {
-            Spremanje...
+            Saving...
           } @else if (editingReminder()) {
-            Sačuvaj izmjene
+            Save Changes
           } @else {
-            Dodaj podsjetnik
+            Add Reminder
           }
         </button>
 
         @if (editingReminder()) {
-          <button type="button" class="cancel-button" (click)="cancelEditing()">Odustani</button>
+          <button type="button" class="cancel-button" (click)="cancelEditing()">Cancel</button>
         }
       </div>
     </form>
@@ -57,11 +57,11 @@
 
   @if (viewState(); as state) {
     @if (state.status === 'loading') {
-      <p class="empty-message">Učitavanje podsjetnika...</p>
+      <p class="empty-message">Loading reminders...</p>
     } @else if (state.status === 'error') {
-      <p class="empty-message error">Greška pri učitavanju podsjetnika. Pokušaj ponovo.</p>
+      <p class="empty-message error">Failed to load reminders. Please try again.</p>
     } @else if (state.reminders.length === 0) {
-      <p class="empty-message">Za ovo vozilo još nema evidentiranih podsjetnika.</p>
+      <p class="empty-message">No reminders recorded for this vehicle yet.</p>
     } @else {
       <div class="reminder-grid">
         @for (reminder of state.reminders; track reminder.id) {
@@ -74,26 +74,26 @@
               </div>
               @if (reminder.dueDate) {
                 <div>
-                  <dt>Rok (datum)</dt>
+                  <dt>Due Date</dt>
                   <dd>{{ reminder.dueDate }}</dd>
                 </div>
               }
               @if (reminder.dueMileage !== null) {
                 <div>
-                  <dt>Rok (kilometraža)</dt>
+                  <dt>Due Mileage</dt>
                   <dd>{{ reminder.dueMileage }} km</dd>
                 </div>
               }
               @if (reminder.notes) {
                 <div class="notes">
-                  <dt>Napomena</dt>
+                  <dt>Notes</dt>
                   <dd>{{ reminder.notes }}</dd>
                 </div>
               }
             </dl>
             <div class="card-actions">
               <button type="button" class="edit-button" (click)="startEditing(reminder)">
-                Uredi
+                Edit
               </button>
               <button
                 type="button"
@@ -101,7 +101,7 @@
                 (click)="deleteReminder(reminder)"
                 [disabled]="deletingReminderId() === reminder.id || isSubmitting()"
               >
-                {{ deletingReminderId() === reminder.id ? 'Brisanje...' : 'Obriši' }}
+                {{ deletingReminderId() === reminder.id ? 'Deleting...' : 'Delete' }}
               </button>
             </div>
           </article>

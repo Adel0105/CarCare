@@ -83,13 +83,13 @@ export class Expenses implements OnInit {
     if (this.vehicleId === null || Number.isNaN(this.vehicleId)) {
       this.formMessage.set({
         type: 'error',
-        text: 'Greška pri brisanju troška. Pokušaj ponovo.',
+        text: 'Failed to delete expense. Please try again.',
       });
       return;
     }
 
     const confirmed = confirm(
-      `Jesi li siguran da želiš obrisati trošak „${this.categoryLabel(expense.category)}"?`,
+      `Are you sure you want to delete the "${this.categoryLabel(expense.category)}" expense?`,
     );
 
     if (!confirmed) {
@@ -108,7 +108,7 @@ export class Expenses implements OnInit {
         this.deletingExpenseId.set(null);
         this.formMessage.set({
           type: 'success',
-          text: 'Trošak je uspješno obrisan.',
+          text: 'Expense deleted successfully.',
         });
         this.loadExpenses();
       },
@@ -116,7 +116,7 @@ export class Expenses implements OnInit {
         this.deletingExpenseId.set(null);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri brisanju troška. Pokušaj ponovo.',
+          text: 'Failed to delete expense. Please try again.',
         });
       },
     });
@@ -136,7 +136,7 @@ export class Expenses implements OnInit {
     ) {
       this.formMessage.set({
         type: 'error',
-        text: 'Popuni sva obavezna polja ispravno.',
+        text: 'Please fill in all required fields correctly.',
       });
       return;
     }
@@ -144,7 +144,7 @@ export class Expenses implements OnInit {
     if (this.vehicleId === null || Number.isNaN(this.vehicleId)) {
       this.formMessage.set({
         type: 'error',
-        text: 'Greška pri dodavanju troška. Pokušaj ponovo.',
+        text: 'Failed to add expense. Please try again.',
       });
       return;
     }
@@ -170,18 +170,18 @@ export class Expenses implements OnInit {
           this.isSubmitting.set(false);
           this.formMessage.set({
             type: 'success',
-            text: 'Trošak je uspješno ažuriran.',
-          });
-          this.loadExpenses();
-        },
-        error: () => {
-          this.isSubmitting.set(false);
-          this.formMessage.set({
-            type: 'error',
-            text: 'Greška pri ažuriranju troška. Pokušaj ponovo.',
-          });
-        },
-      });
+          text: 'Expense updated successfully.',
+        });
+        this.loadExpenses();
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        this.formMessage.set({
+          type: 'error',
+          text: 'Failed to update expense. Please try again.',
+        });
+      },
+    });
       return;
     }
 
@@ -191,7 +191,7 @@ export class Expenses implements OnInit {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'success',
-          text: 'Trošak je uspješno dodan.',
+          text: 'Expense added successfully.',
         });
         this.loadExpenses();
       },
@@ -199,7 +199,7 @@ export class Expenses implements OnInit {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri dodavanju troška. Pokušaj ponovo.',
+          text: 'Failed to add expense. Please try again.',
         });
       },
     });
@@ -208,15 +208,15 @@ export class Expenses implements OnInit {
   protected categoryLabel(category: ExpenseCategory): string {
     switch (category) {
       case ExpenseCategory.Fuel:
-        return 'Gorivo';
+        return 'Fuel';
       case ExpenseCategory.Insurance:
-        return 'Osiguranje';
+        return 'Insurance';
       case ExpenseCategory.Registration:
-        return 'Registracija';
+        return 'Registration';
       case ExpenseCategory.Parking:
         return 'Parking';
       case ExpenseCategory.Other:
-        return 'Ostalo';
+        return 'Other';
     }
   }
 

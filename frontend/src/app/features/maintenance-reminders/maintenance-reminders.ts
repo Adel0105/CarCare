@@ -78,13 +78,13 @@ export class MaintenanceReminders implements OnInit {
     if (this.vehicleId === null || Number.isNaN(this.vehicleId)) {
       this.formMessage.set({
         type: 'error',
-        text: 'Greška pri brisanju podsjetnika. Pokušaj ponovo.',
+        text: 'Failed to delete reminder. Please try again.',
       });
       return;
     }
 
     const confirmed = confirm(
-      `Jesi li siguran da želiš obrisati podsjetnik „${reminder.title}"?`,
+      `Are you sure you want to delete "${reminder.title}"?`,
     );
 
     if (!confirmed) {
@@ -103,7 +103,7 @@ export class MaintenanceReminders implements OnInit {
         this.deletingReminderId.set(null);
         this.formMessage.set({
           type: 'success',
-          text: 'Podsjetnik je uspješno obrisan.',
+          text: 'Reminder deleted successfully.',
         });
         this.loadReminders();
       },
@@ -111,7 +111,7 @@ export class MaintenanceReminders implements OnInit {
         this.deletingReminderId.set(null);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri brisanju podsjetnika. Pokušaj ponovo.',
+          text: 'Failed to delete reminder. Please try again.',
         });
       },
     });
@@ -128,7 +128,7 @@ export class MaintenanceReminders implements OnInit {
     if (!this.form.title.trim() || (dueMileage !== null && dueMileage < 0)) {
       this.formMessage.set({
         type: 'error',
-        text: 'Popuni sva obavezna polja ispravno.',
+        text: 'Please fill in all required fields correctly.',
       });
       return;
     }
@@ -136,7 +136,7 @@ export class MaintenanceReminders implements OnInit {
     if (dueDate === null && dueMileage === null) {
       this.formMessage.set({
         type: 'error',
-        text: 'Unesi rok kao datum i/ili kilometražu.',
+        text: 'Enter a due date and/or due mileage.',
       });
       return;
     }
@@ -144,7 +144,7 @@ export class MaintenanceReminders implements OnInit {
     if (this.vehicleId === null || Number.isNaN(this.vehicleId)) {
       this.formMessage.set({
         type: 'error',
-        text: 'Greška pri dodavanju podsjetnika. Pokušaj ponovo.',
+        text: 'Failed to add reminder. Please try again.',
       });
       return;
     }
@@ -169,18 +169,18 @@ export class MaintenanceReminders implements OnInit {
           this.isSubmitting.set(false);
           this.formMessage.set({
             type: 'success',
-            text: 'Podsjetnik je uspješno ažuriran.',
-          });
-          this.loadReminders();
-        },
-        error: () => {
-          this.isSubmitting.set(false);
-          this.formMessage.set({
-            type: 'error',
-            text: 'Greška pri ažuriranju podsjetnika. Pokušaj ponovo.',
-          });
-        },
-      });
+          text: 'Reminder updated successfully.',
+        });
+        this.loadReminders();
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        this.formMessage.set({
+          type: 'error',
+          text: 'Failed to update reminder. Please try again.',
+        });
+      },
+    });
       return;
     }
 
@@ -190,7 +190,7 @@ export class MaintenanceReminders implements OnInit {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'success',
-          text: 'Podsjetnik je uspješno dodan.',
+          text: 'Reminder added successfully.',
         });
         this.loadReminders();
       },
@@ -198,14 +198,14 @@ export class MaintenanceReminders implements OnInit {
         this.isSubmitting.set(false);
         this.formMessage.set({
           type: 'error',
-          text: 'Greška pri dodavanju podsjetnika. Pokušaj ponovo.',
+          text: 'Failed to add reminder. Please try again.',
         });
       },
     });
   }
 
   protected statusLabel(isCompleted: boolean): string {
-    return isCompleted ? 'Završen' : 'Na čekanju';
+    return isCompleted ? 'Completed' : 'Pending';
   }
 
   private loadReminders(): void {

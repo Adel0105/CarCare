@@ -1,41 +1,41 @@
 <section class="maintenance-records-page">
-  <h1>Održavanje</h1>
+  <h1>Maintenance</h1>
 
   <section class="add-record" [class.editing]="editingRecord()">
-    <h2>{{ editingRecord() ? 'Uredi zapis održavanja' : 'Dodaj zapis održavanja' }}</h2>
+    <h2>{{ editingRecord() ? 'Edit Maintenance Record' : 'Add Maintenance Record' }}</h2>
 
     <form class="record-form" (ngSubmit)="onSubmit()">
       <label>
-        Naziv servisa/popravke
+        Service / Repair Title
         <input type="text" name="title" [(ngModel)]="form.title" required />
       </label>
 
       <label>
-        Datum
+        Date
         <input type="date" name="date" [(ngModel)]="form.date" required />
       </label>
 
       <label>
-        Kilometraža
+        Mileage
         <input type="number" name="mileage" [(ngModel)]="form.mileage" required min="0" />
       </label>
 
       <label>
-        Tip zapisa
+        Type
         <select name="type" [(ngModel)]="form.type" required>
-          <option [ngValue]="MaintenanceType.Service">Servis</option>
-          <option [ngValue]="MaintenanceType.Repair">Popravka</option>
-          <option [ngValue]="MaintenanceType.Other">Ostalo</option>
+          <option [ngValue]="MaintenanceType.Service">Service</option>
+          <option [ngValue]="MaintenanceType.Repair">Repair</option>
+          <option [ngValue]="MaintenanceType.Other">Other</option>
         </select>
       </label>
 
       <label>
-        Cijena (KM)
+        Cost (KM)
         <input type="number" name="cost" [(ngModel)]="form.cost" required min="0" step="0.01" />
       </label>
 
       <label class="full-width">
-        Opis
+        Description
         <textarea name="description" rows="3" [(ngModel)]="form.description"></textarea>
       </label>
 
@@ -52,16 +52,16 @@
       <div class="form-actions">
         <button type="submit" class="submit-button" [disabled]="isSubmitting()">
           @if (isSubmitting()) {
-            Spremanje...
+            Saving...
           } @else if (editingRecord()) {
-            Sačuvaj izmjene
+            Save Changes
           } @else {
-            Dodaj zapis
+            Add Record
           }
         </button>
 
         @if (editingRecord()) {
-          <button type="button" class="cancel-button" (click)="cancelEditing()">Odustani</button>
+          <button type="button" class="cancel-button" (click)="cancelEditing()">Cancel</button>
         }
       </div>
     </form>
@@ -69,11 +69,11 @@
 
   @if (viewState(); as state) {
     @if (state.status === 'loading') {
-      <p class="empty-message">Učitavanje zapisa održavanja...</p>
+      <p class="empty-message">Loading maintenance records...</p>
     } @else if (state.status === 'error') {
-      <p class="empty-message error">Greška pri učitavanju zapisa. Pokušaj ponovo.</p>
+      <p class="empty-message error">Failed to load records. Please try again.</p>
     } @else if (state.records.length === 0) {
-      <p class="empty-message">Za ovo vozilo još nema evidentiranih servisa i popravki.</p>
+      <p class="empty-message">No services or repairs recorded for this vehicle yet.</p>
     } @else {
       <div class="record-grid">
         @for (record of state.records; track record.id) {
@@ -81,37 +81,37 @@
             <h2 class="record-title">{{ record.title }}</h2>
             <dl class="record-details">
               <div>
-                <dt>Datum</dt>
+                <dt>Date</dt>
                 <dd>{{ record.date }}</dd>
               </div>
               <div>
-                <dt>Kilometraža</dt>
+                <dt>Mileage</dt>
                 <dd>{{ record.mileage }} km</dd>
               </div>
               <div>
-                <dt>Tip</dt>
+                <dt>Type</dt>
                 <dd>{{ typeLabel(record.type) }}</dd>
               </div>
               <div>
-                <dt>Cijena</dt>
+                <dt>Cost</dt>
                 <dd>{{ record.cost }} KM</dd>
               </div>
               @if (record.description) {
                 <div class="description">
-                  <dt>Opis</dt>
+                  <dt>Description</dt>
                   <dd>{{ record.description }}</dd>
                 </div>
               }
             </dl>
             <div class="card-actions">
-              <button type="button" class="edit-button" (click)="startEditing(record)">Uredi</button>
+              <button type="button" class="edit-button" (click)="startEditing(record)">Edit</button>
               <button
                 type="button"
                 class="delete-button"
                 (click)="deleteRecord(record)"
                 [disabled]="deletingRecordId() === record.id || isSubmitting()"
               >
-                {{ deletingRecordId() === record.id ? 'Brisanje...' : 'Obriši' }}
+                {{ deletingRecordId() === record.id ? 'Deleting...' : 'Delete' }}
               </button>
             </div>
           </article>

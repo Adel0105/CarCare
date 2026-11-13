@@ -15,12 +15,12 @@ import { DashboardService } from './dashboard.service';
         <p class="dashboard-eyebrow">CarCare overview</p>
         <h1>Dashboard</h1>
         <p class="dashboard-subtitle">
-          Pregled vozila, troškova i održavanja na jednom mjestu.
+          A clear overview of your vehicles, expenses, and maintenance.
         </p>
       </header>
 
       @if (isLoading()) {
-        <p class="empty-message">Učitavanje dashboarda...</p>
+        <p class="empty-message">Loading dashboard...</p>
       } @else if (error(); as errorMessage) {
         <p class="empty-message error">{{ errorMessage }}</p>
       } @else if (dashboard(); as data) {
@@ -28,7 +28,7 @@ import { DashboardService } from './dashboard.service';
           <article class="stat-card accent-vehicles">
             <div class="stat-icon" aria-hidden="true">V</div>
             <div class="stat-body">
-              <h2 class="stat-label">Ukupno vozila</h2>
+              <h2 class="stat-label">Total Vehicles</h2>
               <p class="stat-value">{{ data.totalVehicles }}</p>
             </div>
           </article>
@@ -36,7 +36,7 @@ import { DashboardService } from './dashboard.service';
           <article class="stat-card accent-total">
             <div class="stat-icon" aria-hidden="true">Σ</div>
             <div class="stat-body">
-              <h2 class="stat-label">Ukupni troškovi</h2>
+              <h2 class="stat-label">Total Expenses</h2>
               <p class="stat-value">{{ data.totalExpensesAmount | number: '1.2-2' }} KM</p>
             </div>
           </article>
@@ -44,7 +44,7 @@ import { DashboardService } from './dashboard.service';
           <article class="stat-card accent-month">
             <div class="stat-icon" aria-hidden="true">M</div>
             <div class="stat-body">
-              <h2 class="stat-label">Troškovi ovog mjeseca</h2>
+              <h2 class="stat-label">This Month's Expenses</h2>
               <p class="stat-value">{{ data.currentMonthExpensesAmount | number: '1.2-2' }} KM</p>
             </div>
           </article>
@@ -52,7 +52,7 @@ import { DashboardService } from './dashboard.service';
           <article class="stat-card accent-reminders">
             <div class="stat-icon" aria-hidden="true">!</div>
             <div class="stat-body">
-              <h2 class="stat-label">Aktivni podsjetnici</h2>
+              <h2 class="stat-label">Active Reminders</h2>
               <p class="stat-value">{{ data.activeRemindersCount }}</p>
             </div>
           </article>
@@ -64,12 +64,12 @@ import { DashboardService } from './dashboard.service';
           [class.overdue-ok]="data.overdueRemindersCount === 0"
         >
           <div class="overdue-copy">
-            <h2>Zakašnjeli podsjetnici</h2>
+            <h2>Overdue Reminders</h2>
             <p class="overdue-note">
               @if (data.overdueRemindersCount > 0) {
-                Potrebna pažnja — postoje podsjetnici s isteklim rokom.
+                Attention needed — some reminders are past due.
               } @else {
-                Sve je pod kontrolom — nema zakašnjelih podsjetnika.
+                All clear — no overdue reminders.
               }
             </p>
           </div>
@@ -80,11 +80,11 @@ import { DashboardService } from './dashboard.service';
           <section class="panel expenses-by-category">
             <div class="panel-header">
               <h2>Expenses by Category</h2>
-              <p class="panel-subtitle">Udio troškova po kategorijama</p>
+              <p class="panel-subtitle">Spending breakdown by category</p>
             </div>
 
             @if (data.expensesByCategory.length === 0) {
-              <p class="empty-message">Nema evidentiranih troškova po kategorijama.</p>
+              <p class="empty-message">No expenses recorded by category.</p>
             } @else {
               <ul class="category-list">
                 @for (item of data.expensesByCategory; track item.category) {
@@ -108,11 +108,11 @@ import { DashboardService } from './dashboard.service';
           <section class="panel monthly-expenses">
             <div class="panel-header">
               <h2>Monthly Expenses</h2>
-              <p class="panel-subtitle">Posljednjih šest mjeseci</p>
+              <p class="panel-subtitle">Last six months</p>
             </div>
 
             @if (!hasMonthlyExpenses(data.monthlyExpenses)) {
-              <p class="empty-message">Nema evidentiranih troškova u posljednjih šest mjeseci.</p>
+              <p class="empty-message">No expenses recorded in the last six months.</p>
             } @else {
               <div class="monthly-chart">
                 @for (item of data.monthlyExpenses; track item.year + '-' + item.month) {
@@ -135,12 +135,12 @@ import { DashboardService } from './dashboard.service';
 
         <section class="recent-maintenance">
           <div class="panel-header">
-            <h2>Nedavno održavanje</h2>
-            <p class="panel-subtitle">Posljednje aktivnosti servisa i popravki</p>
+            <h2>Recent Maintenance</h2>
+            <p class="panel-subtitle">Latest services and repairs</p>
           </div>
 
           @if (data.recentMaintenance.length === 0) {
-            <p class="empty-message">Nema evidentiranih aktivnosti održavanja.</p>
+            <p class="empty-message">No maintenance activity recorded yet.</p>
           } @else {
             <div class="activity-list">
               @for (activity of data.recentMaintenance; track activity.id) {
@@ -151,25 +151,25 @@ import { DashboardService } from './dashboard.service';
                   </div>
                   <dl class="activity-details">
                     <div>
-                      <dt>Vozilo</dt>
+                      <dt>Vehicle</dt>
                       <dd>{{ activity.vehicleLabel }}</dd>
                     </div>
                     <div>
-                      <dt>Datum</dt>
-                      <dd>{{ activity.date | date: 'dd.MM.yyyy' }}</dd>
+                      <dt>Date</dt>
+                      <dd>{{ activity.date | date: 'MMM d, y' }}</dd>
                     </div>
                     <div>
-                      <dt>Tip</dt>
+                      <dt>Type</dt>
                       <dd>
                         @switch (activity.type) {
                           @case (0) {
-                            Servis
+                            Service
                           }
                           @case (1) {
-                            Popravka
+                            Repair
                           }
                           @case (2) {
-                            Ostalo
+                            Other
                           }
                           @default {
                             {{ activity.type }}
@@ -231,7 +231,7 @@ export class DashboardComponent implements OnInit {
   }
 
   protected monthLabel(month: number): string {
-    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'];
+    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return labels[month - 1] ?? '';
   }
 
@@ -256,7 +256,7 @@ export class DashboardComponent implements OnInit {
       },
       error: () => {
         this.isLoading.set(false);
-        this.error.set('Greška pri učitavanju dashboarda. Pokušaj ponovo.');
+        this.error.set('Failed to load dashboard. Please try again.');
       },
     });
   }
