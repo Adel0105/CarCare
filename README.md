@@ -28,12 +28,26 @@ building a large platform.
 The project is developed incrementally, one module at a time.
 
 - [x] Project architecture, local development setup and API documentation
-- [ ] **Vehicles** – add, view, edit and delete vehicles (make, model, year, license plate, mileage)
-- [ ] **Maintenance history** – services, repairs and other work with date, mileage, description and cost
-- [ ] **Maintenance reminders** – upcoming work based on date and, where it makes sense, mileage
-- [ ] **Expenses** – categorized vehicle expenses and spending totals
-- [ ] **Dashboard** – overview of vehicles, recent services, upcoming reminders and costs
+- [x] **Vehicles** – add, view, edit and delete vehicles (make, model, year, license plate, mileage)
+- [x] **Maintenance history** – services, repairs and other work with date, mileage, description and cost
+- [x] **Maintenance reminders** – upcoming work based on date and, where it makes sense, mileage
+- [x] **Expenses** – categorized vehicle expenses and spending totals
+- [x] **Dashboard** – overview of vehicles, recent services, upcoming reminders and costs
 - [ ] Authentication and per-user data *(planned for a later phase)*
+
+## Screenshots
+
+### Dashboard
+
+Main overview with key statistics, expense charts, overdue reminders, and recent maintenance.
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Vehicle Management
+
+Vehicle list and CRUD interface for adding, editing, and managing vehicles.
+
+![Vehicle Management](docs/screenshots/vehicles.png)
 
 ## Tech stack
 
